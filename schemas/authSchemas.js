@@ -32,7 +32,3 @@ export const emailSchema = Joi.object({
     .pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
     .required(),
 });
-
-export const subscriptionSchema = Joi.object({
-  subscription: Joi.required().valid("starter", "pro", "business"),
-});
