@@ -36,10 +36,6 @@ export const login = errorWrapper(async (req, res, next) => {
     throw HttpError(401, "Email or password is wrong");
   }
 
-  if (!user.verify) {
-    throw HttpError(401, "Your account is not verified");
-  }
-
   const isCompare = await bcrypt.compare(password, user.password);
 
   if (!isCompare) {
