@@ -1,11 +1,11 @@
-import HttpError from "../../helpers/HttpError.js";
-import { errorWrapper } from "../../helpers/Wrappre.js";
+import HttpError from "../helpers/HttpError.js";
+import { errorWrapper } from "../helpers/Wrappre.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import gravatar from "gravatar";
 import crypto from "crypto";
-import sendVerificationToken from "../../helpers/sendVerificationToken.js";
+import sendVerificationToken from "../helpers/sendVerificationToken.js";
 
 export const register = errorWrapper(async (req, res, next) => {
   const { name, email, password } = req.body;
