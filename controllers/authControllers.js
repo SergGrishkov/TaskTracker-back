@@ -8,7 +8,7 @@ import crypto from "crypto";
 import sendVerificationToken from "../helpers/sendVerificationToken.js";
 
 export const register = errorWrapper(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
   const user = await User.findOne({ email });
 
   if (user) {
@@ -17,17 +17,15 @@ export const register = errorWrapper(async (req, res, next) => {
 
   const passHash = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
-  const verificationToken = crypto.randomUUID();
-  await sendVerificationToken(email, verificationToken);
 
   const newUser = User.create({
+    name,
     email,
     password: passHash,
     avatarURL,
-    verificationToken,
   });
 
-  res.status(201).json({ user: { email, subscription: newUser.subscription } });
+  res.status(201).json({ user: { name, email } });
 });
 
 export const login = errorWrapper(async (req, res, next) => {
@@ -55,7 +53,7 @@ export const login = errorWrapper(async (req, res, next) => {
   await User.findByIdAndUpdate(user._id, { token });
   res
     .status(200)
-    .json({ token, user: { email, subscription: user.subscription } });
+    .json({ token, user: { email } });
 });
 
 export const logout = errorWrapper(async (req, res) => {
