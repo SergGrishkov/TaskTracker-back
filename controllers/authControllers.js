@@ -38,10 +38,6 @@ export const login = errorWrapper(async (req, res, next) => {
     throw HttpError(401, "Email or password is wrong");
   }
 
-  if (!user.verify) {
-    throw HttpError(401, "Your account is not verified");
-  }
-
   const isCompare = await bcrypt.compare(password, user.password);
 
   if (!isCompare) {
@@ -55,7 +51,7 @@ export const login = errorWrapper(async (req, res, next) => {
   await User.findByIdAndUpdate(user._id, { token });
   res
     .status(200)
-    .json({ token, user: { email, subscription: user.subscription } });
+    .json({ token, user: { email } });
 });
 
 export const logout = errorWrapper(async (req, res) => {
