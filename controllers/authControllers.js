@@ -58,10 +58,6 @@ export const logout = errorWrapper(async (req, res) => {
   res.status(204).end();
 });
 
-export const getCurrent = errorWrapper(async (req, res, next) => {
-  const { email, subscription } = req.user;
-  res.json({ email, subscription });
-});
 
 export const verifyEmail = errorWrapper(async (req, res) => {
   const { verificationToken } = req.params;
