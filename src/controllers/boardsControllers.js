@@ -1,12 +1,19 @@
-import Board from "../models/Board";
+import Board from "../models/Board.js";
 import HttpError from "../helpers/HttpError.js";
 import { errorWrapper } from "../helpers/Wrappre.js";
-import updateBoardSchema from "../schemas/boardSchemas.js";
-import createBoardSchema from "../schemas/boardSchemas.js";
+import {
+  updateBoardSchema,
+  createBoardSchema,
+} from "../schemas/boardSchemas.js";
+
+export const getAllBoards = errorWrapper(async (req, res) => {
+  const boards = await Board.find({ userId: req.user.id });
+  res.status(200).json(boards);
+});
 
 export const createBoard = errorWrapper(async (req, res) => {
   const { title, icon, background } = req.body;
-  const board = { title, icon, background, owner: req.user.id };
+  const board = { title, icon, background, userId: req.user.id };
 
   const { error } = createBoardSchema.validate(req.body);
   if (typeof error !== "undefined") {
@@ -44,4 +51,21 @@ export const updateBoard = errorWrapper(async (req, res) => {
   }
 
   res.send(updatedBoard);
+});
+export const deleteBoard = errorWrapper(async (req, res) => {
+  const { id } = req.params;
+  const existingBoard = await Board.findById(id);
+  if (!existingBoard) {
+    throw HttpError(404, "Not found");
+  }
+
+  if (existingBoard.userId.toString() !== req.user.id) {
+    throw HttpError(403, "Not your Board, ALARMA");
+  }
+  const deletedBoard = await Board.findByIdAndDelete(id);
+  if (deletedBoard === null) {
+    throw HttpError(404, "Not found");
+  }
+
+  res.send(deletedBoard);
 });
