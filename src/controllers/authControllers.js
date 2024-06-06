@@ -1,5 +1,5 @@
 import HttpError from "../helpers/HttpError.js";
-import { errorWrapper } from "../helpers/Wrappre.js";
+import { errorWrapper } from "../helpers/Wrapper.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -47,9 +47,7 @@ export const login = errorWrapper(async (req, res, next) => {
   });
 
   await User.findByIdAndUpdate(user._id, { token });
-  res
-    .status(200)
-    .json({ token, user: { email } });
+  res.status(200).json({ token, user: { email } });
 });
 
 export const logout = errorWrapper(async (req, res) => {
@@ -57,7 +55,6 @@ export const logout = errorWrapper(async (req, res) => {
   await User.findByIdAndUpdate(id, { token: "" });
   res.status(204).end();
 });
-
 
 export const verifyEmail = errorWrapper(async (req, res) => {
   const { verificationToken } = req.params;
