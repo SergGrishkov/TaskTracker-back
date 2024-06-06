@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid";
 import { errorWrapper } from "../helpers/Wrapper.js";
 import Column from "../models/Column.js";
 import HttpError from "../helpers/HttpError.js";
@@ -18,15 +17,13 @@ export const getAllColumns = errorWrapper(async (req, res) => {
 export const addColumn = errorWrapper(async (req, res) => {
   const { title } = req.body;
 
-  const columnId = nanoid();
-
   const columnTitle = await Column.findOne({ title });
 
   if (columnTitle) {
     throw HttpError(409, "Try another title. This one is already used");
   }
 
-  const newColumn = await Column.create({ columnId, title });
+  const newColumn = await Column.create({ title });
 
   res.status(201).json(newColumn);
 });

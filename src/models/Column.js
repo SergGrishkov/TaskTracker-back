@@ -16,7 +16,7 @@ const columnSchema = mongoose.Schema(
       ref: "board",
     },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 export default mongoose.model("Column", columnSchema);
