@@ -15,6 +15,12 @@ const userSchema = new Schema(
       required: [true, "Email is required"],
       unique: true,
     },
+    theme: {
+      type: String,
+      required: [true, "Email is required"],
+      enum: ["Light", "Dark", "Violet"],
+      default: "Light",
+    },
     token: {
       type: String,
       default: null,
