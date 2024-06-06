@@ -14,7 +14,7 @@ const boardSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    owner: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
     },
