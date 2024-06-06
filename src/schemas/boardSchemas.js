@@ -5,10 +5,8 @@ export const createBoardSchema = Joi.object({
     .lowercase()
     .trim()
     .required()
-    .messages({ "Enter the title" }),
+    .messages({ "any.required": "Enter the title" }),
 });
 export const updateBoardSchema = Joi.object({
-  title: Joi.string()
-    .lowercase()
-    .trim(),
+  title: Joi.string().lowercase().trim(),
 });
