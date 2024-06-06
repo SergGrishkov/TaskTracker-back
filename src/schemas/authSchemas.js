@@ -12,6 +12,8 @@ export const registerUserSchema = Joi.object({
     .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
     .required()
     .messages({ "any.required": "Missing required field: password" }),
+  theme: Joi.string()
+    .valid("Light", "Dark", "Violet")
 });
 
 export const loginUserSchema = Joi.object({
