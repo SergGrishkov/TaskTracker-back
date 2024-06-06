@@ -7,6 +7,14 @@ const columnSchema = mongoose.Schema(
       required: [true, "This field should be filled!"],
       unique: true,
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+    },
+    boardId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "board",
+    },
   },
   { versionKey: false }
 );

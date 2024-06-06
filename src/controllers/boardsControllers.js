@@ -1,6 +1,6 @@
 import Board from "../models/Board.js";
 import HttpError from "../helpers/HttpError.js";
-import { errorWrapper } from "../helpers/Wrappre.js";
+import { errorWrapper } from "../helpers/Wrapper.js";
 import {
   updateBoardSchema,
   createBoardSchema,
