@@ -1,7 +1,12 @@
 import Board from "../models/Board";
 import HttpError from "../helpers/HttpError.js";
 import { errorWrapper } from "../helpers/Wrappre.js";
-import boardSchema from "../schemas/boardSchemas.js";
+import createBoardSchema from "../schemas/boardSchemas.js";
+
+export const getAllBoards = errorWrapper(async (req, res) => {
+  const boards = await Board.find({ owner: req.user.id });
+  res.status(200).json(boards);
+});
 
 export const createBoard = errorWrapper(async (req, res) => {
   const { title, icon, background } = req.body;
