@@ -30,7 +30,7 @@ export const addColumn = errorWrapper(async (req, res) => {
   }
 
   const newColumn = await Column.create({
-    userId,
+    userId: id,
     boardId,
     title,
     ...req.body,
@@ -47,10 +47,10 @@ export const updateColumn = errorWrapper(async (req, res) => {
     throw HttpError(404, "columnId is missing");
   }
 
-  const oldColumn = await Column.findById({ columnId });
+  const oldColumn = await Column.findById({ _id: columnId });
 
   if (!oldColumn) {
-    throw HttpError(404);
+    throw HttpError(404, `Column with id: ${columnId} not found`);
   }
 
   const newColumn = await Column.findByIdAndUpdate(
@@ -65,12 +65,15 @@ export const updateColumn = errorWrapper(async (req, res) => {
 export const deleteColumn = errorWrapper(async (req, res) => {
   const { id: columnId } = req.params;
 
-  const deletedColumn = await Column.findByIdAndDelete(columnId);
+  await Task.deleteMany({columnId});
 
-  await Task.deleteMany({ columnId });
+  const deletedColumn = await Column.findByIdAndDelete({ _id: columnId });
 
   if (!deletedColumn) {
-    throw HttpError(404);
+    throw HttpError(
+      404,
+      `Column with id: ${columnId} not found and not removed`
+    );
   }
 
   res.json(deletedColumn);
