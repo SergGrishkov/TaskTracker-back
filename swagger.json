@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "My API",
+    "title": "Task Tracker",
     "version": "1.0.0",
-    "description": "This is a sample API"
+    "description": ""
   },
   "servers": [
     {
@@ -20,6 +20,16 @@
       }
     }
   },
+  "tags": [
+    {
+      "name": "User Auth",
+      "description": "Operations related to users"
+    },
+    {
+      "name": "Tasks",
+      "description": "Operations related to Tasks"
+    }
+  ],
   "security": [
     {
       "bearerAuth": []
@@ -28,6 +38,7 @@
   "paths": {
     "/users/register": {
       "post": {
+        "tags": ["User Auth"],
         "summary": "Create a new user",
         "requestBody": {
           "content": {
@@ -55,13 +66,37 @@
         },
         "responses": {
           "201": {
-            "description": "User created successfully."
+            "description": "User created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "john.doe@example.com"
+                        }
+                      }
+                    }
+                  },
+                  "required": ["name", "email", "password"]
+                }
+              }
+            }
           }
         }
       }
     },
     "/users/login": {
       "post": {
+        "tags": ["User Auth"],
         "summary": "Login user",
         "requestBody": {
           "content": {
@@ -114,6 +149,7 @@
     },
     "/users/logout": {
       "post": {
+        "tags": ["User Auth"],
         "summary": "Logout user",
         "security": [
           {
@@ -124,11 +160,351 @@
           "204": {
             "description": "Logout user.",
             "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/tasks/": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Get all tasks",
+        "responses": {
+          "201": {
+            "description": "Return all tasks.",
+            "content": {
               "application/json": {
                 "schema": {
-                  "type": "string",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "6662e78bbde2a294d32be34f"
+                      },
+                      "userId": {
+                        "type": "string",
+                        "example": "6662e436f19539da7e20e32e"
+                      },
+                      "boardId": {
+                        "type": "string",
+                        "example": "6660bea58deb72fa3d250e18"
+                      },
+                      "columnId": {
+                        "type": "string",
+                        "example": "6660bea58deb72fa3d250e19"
+                      },
+                      "title": {
+                        "type": "string",
+                        "example": "The Watch Spot Design"
+                      },
+                      "description": {
+                        "type": "string",
+                        "example": "Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
+                      },
+                      "color": {
+                        "type": "string",
+                        "example": "8FA1D06"
+                      },
+                      "deadline": {
+                        "type": "string",
+                        "example": "2024-06-07"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "example": "2024-06-07T10:57:15.972Z"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "example": "2024-06-07T10:57:15.972Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Tasks"],
+        "summary": "Create a new task",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "boardId": {
+                    "type": "string",
+                    "example": "6660bea58deb72fa3d250e18"
+                  },
+                  "columnId": {
+                    "type": "string",
+                    "example": "6660bea58deb72fa3d250e19"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "The Watch Spot Design"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
+                  },
+                  "color": {
+                    "type": "string",
+                    "example": "8FA1D0"
+                  },
+                  "deadline": {
+                    "type": "string",
+                    "example": "2024-06-07"
+                  }
+                },
+                "required": [
+                  "boardId",
+                  "columnId",
+                  "title",
+                  "description",
+                  "color",
+                  "deadline"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Task created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
                   "properties": {
-                    "message": ""
+                    "_id": {
+                      "type": "string",
+                      "example": "6662e78bbde2a294d32be34f"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "example": "6662e436f19539da7e20e32e"
+                    },
+                    "boardId": {
+                      "type": "string",
+                      "example": "6660bea58deb72fa3d250e18"
+                    },
+                    "columnId": {
+                      "type": "string",
+                      "example": "6660bea58deb72fa3d250e19"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "The Watch Spot Design"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
+                    },
+                    "color": {
+                      "type": "string",
+                      "example": "8FA1D06"
+                    },
+                    "deadline": {
+                      "type": "string",
+                      "example": "2024-06-07"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks/{id}": {
+      "put": {
+        "tags": ["Tasks"],
+        "summary": "Update task by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Task ID for update"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "boardId": {
+                    "type": "string",
+                    "example": "6660bea58deb72fa3d250e18"
+                  },
+                  "columnId": {
+                    "type": "string",
+                    "example": "6660bea58deb72fa3d250e19"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "UPDATE TITLE The Watch Spot Design"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "UPDATE DESCRIPTION Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
+                  },
+                  "color": {
+                    "type": "string",
+                    "example": "8FA1D0"
+                  },
+                  "deadline": {
+                    "type": "string",
+                    "example": "2024-06-07"
+                  }
+                },
+                "required": [
+                  "boardId",
+                  "columnId",
+                  "title",
+                  "description",
+                  "color",
+                  "deadline"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Task updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "6662e78bbde2a294d32be34f"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "example": "6662e436f19539da7e20e32e"
+                    },
+                    "boardId": {
+                      "type": "string",
+                      "example": "6660bea58deb72fa3d250e18"
+                    },
+                    "columnId": {
+                      "type": "string",
+                      "example": "6660bea58deb72fa3d250e19"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "UPDATE TITLE The Watch Spot Design"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "UPDATE DESCRIPTION Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
+                    },
+                    "color": {
+                      "type": "string",
+                      "example": "8FA1D06"
+                    },
+                    "deadline": {
+                      "type": "string",
+                      "example": "2024-06-07"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Tasks"],
+        "summary": "Delete task by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Task ID for update"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task removed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "6662e78bbde2a294d32be34f"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "example": "6662e436f19539da7e20e32e"
+                    },
+                    "boardId": {
+                      "type": "string",
+                      "example": "6660bea58deb72fa3d250e18"
+                    },
+                    "columnId": {
+                      "type": "string",
+                      "example": "6660bea58deb72fa3d250e19"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "The Watch Spot Design"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
+                    },
+                    "color": {
+                      "type": "string",
+                      "example": "8FA1D06"
+                    },
+                    "deadline": {
+                      "type": "string",
+                      "example": "2024-06-07"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    }
                   }
                 }
               }
