@@ -30,7 +30,7 @@ export const addColumn = errorWrapper(async (req, res) => {
   }
 
   const newColumn = await Column.create({
-    userId: id,
+    userId,
     boardId,
     title,
     ...req.body,
@@ -65,7 +65,7 @@ export const updateColumn = errorWrapper(async (req, res) => {
 export const deleteColumn = errorWrapper(async (req, res) => {
   const { id: columnId } = req.params;
 
-  await Task.deleteMany({columnId});
+  await Task.deleteMany({ columnId });
 
   const deletedColumn = await Column.findByIdAndDelete({ _id: columnId });
 
