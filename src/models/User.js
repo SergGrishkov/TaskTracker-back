@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import { Schema, mongoose } from "mongoose";
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
   {
     name: {
       type: String,
@@ -14,6 +14,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Email is required"],
       unique: true,
+    },
+    theme: {
+      type: String,
+      required: [true, "Email is required"],
+      enum: ["Light", "Dark", "Violet"],
+      default: "Light",
     },
     token: {
       type: String,
