@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "My API",
+    "title": "Task Tracker",
     "version": "1.0.0",
-    "description": "This is a sample API"
+    "description": ""
   },
   "servers": [
     {
@@ -20,6 +20,16 @@
       }
     }
   },
+  "tags": [
+    {
+      "name": "User Auth",
+      "description": "Operations related to users"
+    },
+    {
+      "name": "Tasks",
+      "description": "Operations related to Tasks"
+    }
+  ],
   "security": [
     {
       "bearerAuth": []
@@ -28,6 +38,7 @@
   "paths": {
     "/users/register": {
       "post": {
+        "tags": ["User Auth"],
         "summary": "Create a new user",
         "requestBody": {
           "content": {
@@ -62,6 +73,7 @@
     },
     "/users/login": {
       "post": {
+        "tags": ["User Auth"],
         "summary": "Login user",
         "requestBody": {
           "content": {
@@ -114,6 +126,7 @@
     },
     "/users/logout": {
       "post": {
+        "tags": ["User Auth"],
         "summary": "Logout user",
         "security": [
           {
@@ -123,6 +136,63 @@
         "responses": {
           "204": {
             "description": "Logout user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "properties": {
+                    "message": ""
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks/": {
+      "post": {
+        "tags": ["Tasks"],
+        "summary": "Create a new task",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "boardId": {
+                    "type": "string",
+                    "example": "6660bea58deb72fa3d250e18"
+                  },
+                  "columnId": {
+                    "type": "string",
+                    "example": "6660bea58deb72fa3d250e19"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "The Watch Spot Design"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
+                  },
+                  "color": {
+                    "type": "string",
+                    "example": "8FA1D0"
+                  },
+                  "deadline": {
+                    "type": "string",
+                    "example": "12/05/2023"
+                  }
+                },
+                "required": ["boardId", "columnId", "title", "description", "color", "deadline"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Task created.",
             "content": {
               "application/json": {
                 "schema": {
