@@ -21,3 +21,5 @@ columnsRouter.put(
   updateColumn
 );
 columnsRouter.delete("/:columnId", isValidId, deleteColumn);
+
+export default columnsRouter;
