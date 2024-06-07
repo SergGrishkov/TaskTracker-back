@@ -41,7 +41,7 @@ export const addColumn = errorWrapper(async (req, res) => {
 
 export const updateColumn = errorWrapper(async (req, res) => {
   const { title } = req.body;
-  const { columnId } = req.params;
+  const { id: columnId } = req.params;
 
   if (!columnId) {
     throw HttpError(404, "columnId is missing");
@@ -63,7 +63,7 @@ export const updateColumn = errorWrapper(async (req, res) => {
 });
 
 export const deleteColumn = errorWrapper(async (req, res) => {
-  const { columnId } = req.params;
+  const { id: columnId } = req.params;
 
   const deletedColumn = await Column.findByIdAndDelete(columnId);
 
