@@ -15,11 +15,11 @@ const columnsRouter = express.Router();
 columnsRouter.get("/", getAllColumns);
 columnsRouter.post("/", validateBody(createAndUpdateColumnSchema), addColumn);
 columnsRouter.put(
-  "/:columnId",
+  "/:id",
   isValidId,
   validateBody(createAndUpdateColumnSchema),
   updateColumn
 );
-columnsRouter.delete("/:columnId", isValidId, deleteColumn);
+columnsRouter.delete("/:id", isValidId, deleteColumn);
 
 export default columnsRouter;
