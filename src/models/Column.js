@@ -16,6 +16,7 @@ const columnSchema = mongoose.Schema(
       type: String,
       required: [true, "This field should be filled!"],
       unique: true,
+      enum: ["To Do", "In progress", "Done"],
     },
   },
   { versionKey: false, timestamps: true }
