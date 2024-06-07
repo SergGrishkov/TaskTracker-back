@@ -4,7 +4,7 @@ import Task from "../models/Task.js";
 import HttpError from "../helpers/HttpError.js";
 
 export const getAllColumns = errorWrapper(async (req, res) => {
-  const { userId } = req.user;
+  const { id: userId } = req.user;
 
   const allColumns = await Column.find({ userId });
 
@@ -16,7 +16,7 @@ export const getAllColumns = errorWrapper(async (req, res) => {
 });
 
 export const addColumn = errorWrapper(async (req, res) => {
-  const { id } = req.user;
+  const { id: userId } = req.user;
   const { title, boardId } = req.body;
 
   if (!boardId) {
