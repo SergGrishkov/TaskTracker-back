@@ -7,19 +7,23 @@ import {
   getAllColumns,
   updateColumn,
 } from "../controllers/columnsControllers.js";
-import { createAndUpdateColumnSchema } from "../schemas/columnSchemas.js";
+import {
+  createColumnSchema,
+  updateColumnSchema,
+} from "../schemas/columnSchemas.js";
 import isValidId from "../helpers/validateId.js";
 
 const columnsRouter = express.Router();
 
 columnsRouter.get("/", getAllColumns);
-columnsRouter.post("/", validateBody(createAndUpdateColumnSchema), addColumn);
+columnsRouter.post("/", validateBody(createColumnSchema), addColumn);
 columnsRouter.put(
   "/:id",
   isValidId,
-  validateBody(createAndUpdateColumnSchema),
+  validateBody(updateColumnSchema),
   updateColumn
 );
 columnsRouter.delete("/:id", isValidId, deleteColumn);
 
 export default columnsRouter;
+
