@@ -9,11 +9,7 @@ export const getAllTasks = errorWrapper(async (req, resp) => {
     userId,
   });
 
-  const sortedArray = _.orderBy(
-    result,
-    [(obj) => obj.createdAt],
-    ["asc"]
-  );
+  const sortedArray = _.orderBy(result, [(obj) => obj.createdAt], ["asc"]);
 
   resp.status(201).json(sortedArray);
 });
@@ -22,7 +18,7 @@ export const createTask = errorWrapper(async (req, resp) => {
   const { id } = req.user;
   const { boardId, columnId } = req.body;
   if (!boardId || !columnId) {
-    throw HttpError(404, "boadrId or columnId is missing");
+    throw HttpError(404, "boardId or columnId is missing");
   }
 
   const result = await Task.create({

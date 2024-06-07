@@ -1,5 +1,6 @@
 import { errorWrapper } from "../helpers/Wrapper.js";
 import Column from "../models/Column.js";
+import Task from "../models/Task.js";
 import HttpError from "../helpers/HttpError.js";
 
 export const getAllColumns = errorWrapper(async (req, res) => {
@@ -15,7 +16,12 @@ export const getAllColumns = errorWrapper(async (req, res) => {
 });
 
 export const addColumn = errorWrapper(async (req, res) => {
-  const { title } = req.body;
+  const { userId } = req.user;
+  const { title, boardId } = req.body;
+
+  if (!boardId) {
+    throw HttpError(404, "No board for such column");
+  }
 
   const columnTitle = await Column.findOne({ title });
 
@@ -23,7 +29,12 @@ export const addColumn = errorWrapper(async (req, res) => {
     throw HttpError(409, "Try another title. This one is already used");
   }
 
-  const newColumn = await Column.create({ title });
+  const newColumn = await Column.create({
+    userId,
+    boardId,
+    title,
+    ...req.body,
+  });
 
   res.status(201).json(newColumn);
 });
@@ -32,23 +43,31 @@ export const updateColumn = errorWrapper(async (req, res) => {
   const { title } = req.body;
   const { columnId } = req.params;
 
-  const newTitle = await Column.findByIdAndUpdate(
+  if (!columnId) {
+    throw HttpError(404, "columnId is missing");
+  }
+
+  const oldColumn = await Column.findById({ columnId });
+
+  if (!oldColumn) {
+    throw HttpError(404);
+  }
+
+  const newColumn = await Column.findByIdAndUpdate(
     columnId,
     { title },
     { new: true }
   );
 
-  if (!newTitle) {
-    throw HttpError(404);
-  }
-
-  res.json(newTitle);
+  res.json(newColumn);
 });
 
 export const deleteColumn = errorWrapper(async (req, res) => {
   const { columnId } = req.params;
 
   const deletedColumn = await Column.findByIdAndDelete(columnId);
+
+  await Task.deleteMany({ columnId });
 
   if (!deletedColumn) {
     throw HttpError(404);
