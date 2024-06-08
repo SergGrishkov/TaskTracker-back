@@ -44,7 +44,7 @@ export const updateBoard = errorWrapper(async (req, res) => {
 });
 export const deleteBoard = errorWrapper(async (req, res) => {
   const { id: boardId } = req.params;
-  const existingBoard = await Board.findById(id);
+  const existingBoard = await Board.findById(boardId);
   if (!existingBoard) {
     throw HttpError(404, "Not found");
   }
