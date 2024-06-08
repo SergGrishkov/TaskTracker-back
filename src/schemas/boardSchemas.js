@@ -11,6 +11,6 @@ export const createBoardSchema = Joi.object({
 });
 export const updateBoardSchema = Joi.object({
   title: Joi.string().lowercase().trim(),
-  icon: Joi.string(),
-  background: Joi.string(),
+  icon: Joi.string().valid("Light", "Dark", "Violet"),
+  background: Joi.string().valid("Light", "Dark", "Violet"),
 });

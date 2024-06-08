@@ -8,11 +8,13 @@ const boardSchema = new mongoose.Schema(
     },
     icon: {
       type: String,
-      default: null,
+      enum: ["Light", "Dark", "Violet"],
+      default: "Light",
     },
     background: {
       type: String,
-      default: null,
+      enum: ["Light", "Dark", "Violet"],
+      default: "Light",
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,

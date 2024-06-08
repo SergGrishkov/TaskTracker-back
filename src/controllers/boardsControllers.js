@@ -15,10 +15,6 @@ export const createBoard = errorWrapper(async (req, res) => {
   const { title, icon, background } = req.body;
   const board = { title, icon, background, userId: req.user.id };
 
-  const { error } = createBoardSchema.validate(req.body);
-  if (typeof error !== "undefined") {
-    throw HttpError(400, error.message);
-  }
   const newBoard = await Board.create(board);
   res.status(201).send(newBoard);
 });
@@ -30,10 +26,6 @@ export const updateBoard = errorWrapper(async (req, res) => {
 
   if (Object.keys(req.body).length === 0) {
     throw HttpError(400, "Body must have at least one field");
-  }
-  const { error } = updateBoardSchema.validate(req.body);
-  if (typeof error !== "undefined") {
-    throw HttpError(400, error.message);
   }
   const existingBoard = await Board.findById(id);
   if (!existingBoard) {
