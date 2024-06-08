@@ -1,10 +1,6 @@
 import Board from "../models/Board.js";
 import HttpError from "../helpers/HttpError.js";
 import { errorWrapper } from "../helpers/Wrapper.js";
-import {
-  updateBoardSchema,
-  createBoardSchema,
-} from "../schemas/boardSchemas.js";
 
 export const getAllBoards = errorWrapper(async (req, res) => {
   const boards = await Board.find({ userId: req.user.id });
@@ -32,8 +28,8 @@ export const updateBoard = errorWrapper(async (req, res) => {
     throw HttpError(404, "Not found");
   }
 
-  if (existingBoard.owner.toString() !== req.user.id) {
-    throw HttpError(403, "Not your Board, ALARMA");
+  if (existingBoard.userId.toString() !== req.user.id.toString()) {
+    throw HttpError(403, "Authentication problem, choose your board ");
   }
   const updatedBoard = await Board.findByIdAndUpdate(id, board, {
     new: true,
@@ -51,8 +47,8 @@ export const deleteBoard = errorWrapper(async (req, res) => {
     throw HttpError(404, "Not found");
   }
 
-  if (existingBoard.userId.toString() !== req.user.id) {
-    throw HttpError(403, "Not your Board, ALARMA");
+  if (existingBoard.userId.toString() !== req.user.id.toString()) {
+    throw HttpError(403, "Authentication problem, choose your board");
   }
   const deletedBoard = await Board.findByIdAndDelete(id);
   if (deletedBoard === null) {
