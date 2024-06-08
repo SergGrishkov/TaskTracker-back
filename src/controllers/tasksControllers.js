@@ -1,5 +1,6 @@
 import { errorWrapper } from "../helpers/Wrapper.js";
 import Task from "../models/Task.js";
+import Column from "../models/Column.js";
 import HttpError from "../helpers/HttpError.js";
 import _ from "lodash";
 
@@ -32,7 +33,7 @@ export const createTask = errorWrapper(async (req, resp) => {
 });
 
 export const updateTask = errorWrapper(async (req, resp) => {
-  console.log("Task updated");
+  const { id: userId } = req.user;
   const { id } = req.params;
   const { columnId } = req.body;
 
@@ -40,23 +41,48 @@ export const updateTask = errorWrapper(async (req, resp) => {
     throw HttpError(404, "columnId is missing");
   }
 
-  const existingTask = await Task.findById(id);
-  if (!existingTask) {
+  const result = await Task.findOneAndUpdate({ _id: id, userId }, req.body, {
+    new: true,
+  });
+  if (!result) {
     throw HttpError(404, `Task with id: ${id} not found`);
   }
-
-  const result = await Task.findByIdAndUpdate(id, req.body, { new: true });
 
   resp.status(200).json(result);
 });
 
 export const deleteTask = errorWrapper(async (req, resp) => {
+  const { id: userId } = req.user;
   const { id } = req.params;
 
-  const removedTask = await Task.findByIdAndDelete(id);
+  const removedTask = await Task.findOneAndDelete({ _id: id, userId });
   if (!removedTask) {
     throw HttpError(404, `Task with id: ${id} not found and not removed`);
   }
 
   resp.status(200).json(removedTask);
+});
+
+export const updateTaskColumnIdByTaskId = errorWrapper(async (req, resp) => {
+  const { id: userId } = req.user;
+  const { id: taskId } = req.params;
+  const { title, boardId } = req.body;
+
+  const column = await Column.findOne({ title, userId, boardId });
+  if (!column) {
+    throw HttpError(404, `Column with title: '${title}' not found`);
+  }
+
+  const task = await Task.findOneAndUpdate(
+    { _id: taskId, userId, boardId },
+    { columnId: column._id },
+    {
+      new: true,
+    }
+  );
+  if (!task) {
+    throw HttpError(404, `Task with id: ${id} not found and can't update.`);
+  }
+
+  resp.status(200).json(task);
 });
