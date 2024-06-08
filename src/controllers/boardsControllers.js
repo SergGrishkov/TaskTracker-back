@@ -1,6 +1,8 @@
 import Board from "../models/Board.js";
 import HttpError from "../helpers/HttpError.js";
 import { errorWrapper } from "../helpers/Wrapper.js";
+import Column from "../models/Column.js";
+import Task from "../models/Task.js";
 
 export const getAllBoards = errorWrapper(async (req, res) => {
   const boards = await Board.find({ userId: req.user.id });
@@ -16,14 +18,14 @@ export const createBoard = errorWrapper(async (req, res) => {
 });
 
 export const updateBoard = errorWrapper(async (req, res) => {
-  const { id } = req.params;
+  const { id: boardId } = req.params;
   const { title, icon, background } = req.body;
   const board = { title, icon, background };
 
   if (Object.keys(req.body).length === 0) {
     throw HttpError(400, "Body must have at least one field");
   }
-  const existingBoard = await Board.findById(id);
+  const existingBoard = await Board.findById({ _id: boardId });
   if (!existingBoard) {
     throw HttpError(404, "Not found");
   }
@@ -31,7 +33,7 @@ export const updateBoard = errorWrapper(async (req, res) => {
   if (existingBoard.userId.toString() !== req.user.id.toString()) {
     throw HttpError(403, "Authentication problem, choose your board ");
   }
-  const updatedBoard = await Board.findByIdAndUpdate(id, board, {
+  const updatedBoard = await Board.findByIdAndUpdate(boardId, board, {
     new: true,
   });
   if (updatedBoard === null) {
@@ -41,16 +43,17 @@ export const updateBoard = errorWrapper(async (req, res) => {
   res.send(updatedBoard);
 });
 export const deleteBoard = errorWrapper(async (req, res) => {
-  const { id } = req.params;
+  const { id: boardId } = req.params;
   const existingBoard = await Board.findById(id);
   if (!existingBoard) {
     throw HttpError(404, "Not found");
   }
-
+  await Task.deleteMany({ boardId });
+  await Column.deleteMany({ boardId });
   if (existingBoard.userId.toString() !== req.user.id.toString()) {
     throw HttpError(403, "Authentication problem, choose your board");
   }
-  const deletedBoard = await Board.findByIdAndDelete(id);
+  const deletedBoard = await Board.findByIdAndDelete({ _id: boardId });
   if (deletedBoard === null) {
     throw HttpError(404, "Not found");
   }
