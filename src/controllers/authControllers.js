@@ -8,6 +8,7 @@ import crypto from "crypto";
 import sendVerificationToken from "../helpers/sendVerificationToken.js";
 import Board from "../models/Board.js";
 import Column from "../models/Column.js";
+import Task from "../models/Task.js";
 
 export const register = errorWrapper(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -103,17 +104,27 @@ export const resendVerifyEmail = errorWrapper(async (req, res) => {
 export const current = errorWrapper(async (req, res, next) => {
   await User.findOne(req.user);
   const boards = await Board.find({ userId: req.user.id });
-  // const allColumns = await Column.find({ userId: req.user.id });
   const boardsArr = await Promise.all(
     boards.map(async (board) => {
       const boardId = board._id.toString();
-      const сolumns = await Column.find({ boardId });
-      return { ...board.toObject(), сolumns };
+      const columns = await Column.find({ boardId });
+
+      const columnsArr = await Promise.all(
+        columns.map(async (column) => {
+          const columnid = column._id.toString();
+          const tasks = await Task.find({ columnId: columnid });
+          console.log(tasks);
+
+          return { ...column.toObject(), tasks };
+        })
+      );
+
+      return { ...board.toObject(), columns: columnsArr };
     })
   );
-  console.log(boardsArr);
+
   return res.status(200).json({
     userId: req.user.id,
-    boardsArr,
+    boards: boardsArr,
   });
 });
