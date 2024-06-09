@@ -50,9 +50,8 @@ export const login = errorWrapper(async (req, res, next) => {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: "120h",
   });
-
   await User.findByIdAndUpdate(user._id, { token });
-  res.status(200).json({ token, user: { email, theme } });
+  res.status(200).json({ token, user: { email, theme, name: user.name } });
 });
 
 export const logout = errorWrapper(async (req, res) => {
@@ -134,7 +133,7 @@ export const feedback = errorWrapper(async (req, res, next) => {
   const verifyMail = {
     to: "lysbrodya@gmail.com",
     subject: "Mail support service",
-    html: `<p>Mail from:</p><br><p style="color: green"> ${email}</p><br><p>${message}</p>`,
+    html: `<p>Mail from:</p><p style="color: green"> ${email}</p><p>message:</p><p style="color: red">${message}</p>`,
     text: `Mail from: ${email}.${message}`,
   };
   await sendEmail(verifyMail);
