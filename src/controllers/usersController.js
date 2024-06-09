@@ -48,19 +48,16 @@ async function resizeImage(imagePath, width, height) {
 }
 
 export const changeTheme = errorWrapper(async (req, res) => {
-  const { theme, userId } = req.body;
+  const { theme } = req.body;
+  const { _id } = req.user;
 
-  const user = await User.findById(userId);
+  const user = await User.findById(_id);
 
   if (!user) {
     throw HttpError(404, "No user with such ID");
   }
 
-  const newUser = await User.findByIdAndUpdate(
-    userId,
-    { theme },
-    { new: true }
-  );
+  const newUser = await User.findByIdAndUpdate(_id, { theme }, { new: true });
 
   res.json(newUser);
 });
