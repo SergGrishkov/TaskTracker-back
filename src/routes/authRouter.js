@@ -6,10 +6,13 @@ import {
   login,
   logout,
   current,
+  feedback,
 } from "../controllers/authControllers.js";
 import { checkAuth } from "../middlewares/checkAuth.js";
+import { feedbackSchema } from "../schemas/feedbackSchemas.js";
 import { changeTheme } from "../controllers/usersController.js";
 import { changeThemeSchema } from "../schemas/userSchemas.js";
+
 
 const authRouter = express.Router();
 
@@ -25,5 +28,6 @@ authRouter.patch(
 );
 
 authRouter.get("/current", checkAuth, current);
+authRouter.post("/feedback", validateBody(feedbackSchema), checkAuth, feedback);
 
 export default authRouter;

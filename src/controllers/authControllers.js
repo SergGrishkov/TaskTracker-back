@@ -8,6 +8,8 @@ import crypto from "crypto";
 import sendVerificationToken from "../helpers/sendVerificationToken.js";
 import Board from "../models/Board.js";
 import Column from "../models/Column.js";
+import Task from "../models/Task.js";
+import sendEmail from "../helpers/feedback.js";
 
 export const register = errorWrapper(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -103,17 +105,40 @@ export const resendVerifyEmail = errorWrapper(async (req, res) => {
 export const current = errorWrapper(async (req, res, next) => {
   await User.findOne(req.user);
   const boards = await Board.find({ userId: req.user.id });
-  // const allColumns = await Column.find({ userId: req.user.id });
   const boardsArr = await Promise.all(
     boards.map(async (board) => {
       const boardId = board._id.toString();
       const columns = await Column.find({ boardId });
-      return { ...board.toObject(), columns };
+
+      const columnsArr = await Promise.all(
+        columns.map(async (column) => {
+          const columnid = column._id.toString();
+          const tasks = await Task.find({ columnId: columnid });
+
+          return { ...column.toObject(), tasks };
+        })
+      );
+
+      return { ...board.toObject(), columns: columnsArr };
     })
   );
-  console.log(boardsArr);
+
   return res.status(200).json({
     userId: req.user.id,
-    boardsArr,
+    boards: boardsArr,
+  });
+});
+export const feedback = errorWrapper(async (req, res, next) => {
+  const { email, message } = req.body;
+  const taskProjectEmail = "taskpro.project@gmail.com";
+  const verifyMail = {
+    to: "lysbrodya@gmail.com",
+    subject: "Mail support service",
+    html: `<p>Mail from:</p><br><p style="color: green"> ${email}</p><br><p>${message}</p>`,
+    text: `Mail from: ${email}.${message}`,
+  };
+  await sendEmail(verifyMail);
+  res.status(200).send({
+    message: "Your request is being processed, you will be contacted soon",
   });
 });
