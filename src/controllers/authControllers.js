@@ -134,7 +134,7 @@ export const feedback = errorWrapper(async (req, res, next) => {
   const verifyMail = {
     to: "lysbrodya@gmail.com",
     subject: "Mail support service",
-    html: `<p>Mail from:</p><br><p style="color: green"> ${email}</p><br><p>${message}</p>`,
+    html: `<p>Mail from:</p><p style="color: green"> ${email}</p><p>message:</p><p style="color: red">${message}</p>`,
     text: `Mail from: ${email}.${message}`,
   };
   await sendEmail(verifyMail);
