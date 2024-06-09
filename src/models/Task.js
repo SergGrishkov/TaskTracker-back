@@ -36,4 +36,6 @@ const taskSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
+taskSchema.index({ userId: 1, boardId: 1, columnId: 1 }, { unique: true });
+
 export default mongoose.model("Task", taskSchema);
