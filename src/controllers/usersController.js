@@ -1,6 +1,6 @@
-import { errorWrapper } from "../helpers/Wrappre.js";
+import { errorWrapper } from "../helpers/Wrapper.js";
 import path from "path";
-import User from "../db/models/User.js";
+import User from "../models/User.js";
 import Jimp from "jimp";
 
 export const updateAvatar = errorWrapper(async (req, res, next) => {
