@@ -3,7 +3,6 @@ import path from "path";
 import User from "../db/models/User.js";
 import Jimp from "jimp";
 
-
 export const updateAvatar = errorWrapper(async (req, res, next) => {
   const { id, avatarURL: oldAvatarURL } = req.user;
   const { path: tempUpload, originalname } = req.file;
@@ -46,3 +45,5 @@ async function resizeImage(imagePath, width, height) {
   await image.resize(width, height);
   await image.writeAsync(imagePath);
 }
+
+export const chooseTheme = errorWrapper(async (req, res, next) => {});
