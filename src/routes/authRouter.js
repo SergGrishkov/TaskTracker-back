@@ -13,7 +13,6 @@ import { feedbackSchema } from "../schemas/feedbackSchemas.js";
 import { changeTheme } from "../controllers/usersController.js";
 import { changeThemeSchema } from "../schemas/userSchemas.js";
 
-
 const authRouter = express.Router();
 
 authRouter.post("/register", validateBody(registerUserSchema), register);
