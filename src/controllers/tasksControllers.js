@@ -35,15 +35,19 @@ export const createTask = errorWrapper(async (req, resp) => {
 export const updateTask = errorWrapper(async (req, resp) => {
   const { id: userId } = req.user;
   const { id } = req.params;
-  const { columnId } = req.body;
+  const { columnId, boardId } = req.body;
 
   if (!columnId) {
     throw HttpError(404, "columnId is missing");
   }
 
-  const result = await Task.findOneAndUpdate({ _id: id, userId }, req.body, {
-    new: true,
-  });
+  const result = await Task.findOneAndUpdate(
+    { _id: id, userId, boardId, columnId },
+    req.body,
+    {
+      new: true,
+    }
+  );
   if (!result) {
     throw HttpError(404, `Task with id: ${id} not found`);
   }
@@ -54,8 +58,14 @@ export const updateTask = errorWrapper(async (req, resp) => {
 export const deleteTask = errorWrapper(async (req, resp) => {
   const { id: userId } = req.user;
   const { id } = req.params;
+  const { columnId, boardId } = req.body;
 
-  const removedTask = await Task.findOneAndDelete({ _id: id, userId });
+  const removedTask = await Task.findOneAndDelete({
+    _id: id,
+    userId,
+    columnId,
+    boardId,
+  });
   if (!removedTask) {
     throw HttpError(404, `Task with id: ${id} not found and not removed`);
   }
@@ -66,15 +76,15 @@ export const deleteTask = errorWrapper(async (req, resp) => {
 export const updateTaskColumnIdByTaskId = errorWrapper(async (req, resp) => {
   const { id: userId } = req.user;
   const { id: taskId } = req.params;
-  const { title, boardId } = req.body;
+  const { title, boardId, columnId } = req.body;
 
-  const column = await Column.findOne({ title, userId, boardId });
+  const column = await Column.findOne({ title, userId, boardId, columnId });
   if (!column) {
     throw HttpError(404, `Column with title: '${title}' not found`);
   }
 
   const task = await Task.findOneAndUpdate(
-    { _id: taskId, userId, boardId },
+    { _id: taskId, userId, boardId, columnId },
     { columnId: column._id },
     {
       new: true,
