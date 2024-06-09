@@ -2,6 +2,7 @@ import { errorWrapper } from "../helpers/Wrapper.js";
 import path from "path";
 import User from "../models/User.js";
 import Jimp from "jimp";
+import HttpError from "../helpers/HttpError.js";
 
 export const updateAvatar = errorWrapper(async (req, res, next) => {
   const { id, avatarURL: oldAvatarURL } = req.user;
@@ -46,4 +47,20 @@ async function resizeImage(imagePath, width, height) {
   await image.writeAsync(imagePath);
 }
 
-export const chooseTheme = errorWrapper(async (req, res, next) => {});
+export const changeTheme = errorWrapper(async (req, res) => {
+  const { theme, userId } = req.body;
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw HttpError(404, "No user with such ID");
+  }
+
+  const newUser = await User.findByIdAndUpdate(
+    userId,
+    { theme },
+    { new: true }
+  );
+
+  res.json(newUser);
+});
