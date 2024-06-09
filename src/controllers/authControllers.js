@@ -50,9 +50,8 @@ export const login = errorWrapper(async (req, res, next) => {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: "120h",
   });
-
   await User.findByIdAndUpdate(user._id, { token });
-  res.status(200).json({ token, user: { email, theme } });
+  res.status(200).json({ token, user: { email, theme, name: user.name } });
 });
 
 export const logout = errorWrapper(async (req, res) => {
