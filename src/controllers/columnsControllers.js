@@ -30,7 +30,7 @@ export const addColumn = errorWrapper(async (req, res) => {
   }
 
   const newColumn = await Column.create({
-    userId: id,
+    userId,
     boardId,
     title,
     ...req.body,

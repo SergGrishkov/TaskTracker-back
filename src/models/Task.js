@@ -9,10 +9,12 @@ const taskSchema = new Schema(
     boardId: {
       type: Schema.Types.ObjectId,
       ref: "Board",
+      required: true,
     },
     columnId: {
       type: Schema.Types.ObjectId,
       ref: "Column",
+      required: true,
     },
     title: {
       type: String,
