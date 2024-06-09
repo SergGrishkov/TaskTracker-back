@@ -6,6 +6,8 @@ import bcrypt from "bcrypt";
 import gravatar from "gravatar";
 import crypto from "crypto";
 import sendVerificationToken from "../helpers/sendVerificationToken.js";
+import Board from "../models/Board.js";
+import Column from "../models/Column.js";
 
 export const register = errorWrapper(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -95,5 +97,23 @@ export const resendVerifyEmail = errorWrapper(async (req, res) => {
   await sendVerificationToken(email, user.verificationToken);
   res.json({
     message: "Verify email sent",
+  });
+});
+
+export const current = errorWrapper(async (req, res, next) => {
+  await User.findOne(req.user);
+  const boards = await Board.find({ userId: req.user.id });
+  // const allColumns = await Column.find({ userId: req.user.id });
+  const boardsArr = await Promise.all(
+    boards.map(async (board) => {
+      const boardId = board._id.toString();
+      const сolumns = await Column.find({ boardId });
+      return { ...board.toObject(), сolumns };
+    })
+  );
+  console.log(boardsArr);
+  return res.status(200).json({
+    userId: req.user.id,
+    boardsArr,
   });
 });
