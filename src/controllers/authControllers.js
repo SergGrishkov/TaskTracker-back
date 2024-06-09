@@ -113,7 +113,6 @@ export const current = errorWrapper(async (req, res, next) => {
         columns.map(async (column) => {
           const columnid = column._id.toString();
           const tasks = await Task.find({ columnId: columnid });
-          console.log(tasks);
 
           return { ...column.toObject(), tasks };
         })
