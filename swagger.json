@@ -30,6 +30,10 @@
       "description": "Operations related to Boards"
     },
     {
+      "name": "Columns",
+      "description": "Operations related to Columns"
+    },
+    {
       "name": "Tasks",
       "description": "Operations related to Tasks"
     }
@@ -242,11 +246,7 @@
                     "example": "Sakura"
                   }
                 },
-                "required": [
-                  "title",
-                  "icon",
-                  "background"
-                ]
+                "required": ["title", "icon", "background"]
               }
             }
           }
@@ -418,6 +418,249 @@
                     "background": {
                       "type": "string",
                       "example": "Sakura"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/columns/": {
+      "get": {
+        "tags": ["Columns"],
+        "summary": "Get all columns",
+        "responses": {
+          "201": {
+            "description": "Return all columns.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "6662e78bbde2a294d32be34f"
+                      },
+                      "userId": {
+                        "type": "string",
+                        "example": "6662e436f19539da7e20e32e"
+                      },
+                      "boardId": {
+                        "type": "string",
+                        "example": "6660bea58deb72fa3d250e18"
+                      },
+                      "title": {
+                        "type": "string",
+                        "example": "The Watch Spot Design"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "example": "2024-06-07T10:57:15.972Z"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "example": "2024-06-07T10:57:15.972Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Columns"],
+        "summary": "Create a new column",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "boardId": {
+                    "type": "string",
+                    "example": "6660bea58deb72fa3d250e18"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "The Watch Spot Design"
+                  }
+                },
+                "required": [
+                  "boardId",
+                  "title"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Column created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "6662e78bbde2a294d32be34f"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "example": "6662e436f19539da7e20e32e"
+                    },
+                    "boardId": {
+                      "type": "string",
+                      "example": "6660bea58deb72fa3d250e18"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "The Watch Spot Design"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/columns/{id}": {
+      "put": {
+        "tags": ["Columns"],
+        "summary": "Update column by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Column ID for update"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "boardId": {
+                    "type": "string",
+                    "example": "6660bea58deb72fa3d250e18"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "UPDATE TITLE The Watch Spot Design"
+                  }
+                },
+                "required": [
+                  "boardId",
+                  "title"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Column updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "6662e78bbde2a294d32be34f"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "example": "6662e436f19539da7e20e32e"
+                    },
+                    "boardId": {
+                      "type": "string",
+                      "example": "6660bea58deb72fa3d250e18"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "UPDATE TITLE The Watch Spot Design"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Columns"],
+        "summary": "Delete column by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Column ID for update"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Column removed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "6662e78bbde2a294d32be34f"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "example": "6662e436f19539da7e20e32e"
+                    },
+                    "boardId": {
+                      "type": "string",
+                      "example": "6660bea58deb72fa3d250e18"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "The Watch Spot Design"
                     },
                     "createdAt": {
                       "type": "string",
