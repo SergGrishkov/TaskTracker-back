@@ -107,8 +107,8 @@ export const current = errorWrapper(async (req, res, next) => {
   const boardsArr = await Promise.all(
     boards.map(async (board) => {
       const boardId = board._id.toString();
-      const сolumns = await Column.find({ boardId });
-      return { ...board.toObject(), сolumns };
+      const columns = await Column.find({ boardId });
+      return { ...board.toObject(), columns };
     })
   );
   console.log(boardsArr);
