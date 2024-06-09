@@ -40,7 +40,7 @@ export const addColumn = errorWrapper(async (req, res) => {
 });
 
 export const updateColumn = errorWrapper(async (req, res) => {
-  const { title } = req.body;
+  const { title, boardId } = req.body;
   const { id: columnId } = req.params;
 
   if (!columnId) {
@@ -53,8 +53,8 @@ export const updateColumn = errorWrapper(async (req, res) => {
     throw HttpError(404, `Column with id: ${columnId} not found`);
   }
 
-  const newColumn = await Column.findByIdAndUpdate(
-    columnId,
+  const newColumn = await Column.findOneAndUpdate(
+    { boardId },
     { title },
     { new: true }
   );
