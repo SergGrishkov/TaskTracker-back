@@ -159,16 +159,51 @@
       "post": {
         "tags": ["User Auth"],
         "summary": "Logout user",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "responses": {
           "204": {
             "description": "Logout user.",
             "content": {
               "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/users/theme": {
+      "post": {
+        "tags": ["User Auth"],
+        "summary": "Change theme for user",
+        "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "theme": {
+                  "type": "string",
+                  "example": "Light"
+                }
+              },
+              "required": ["theme"]
+            }
+          }
+        }
+      },
+        "responses": {
+          "200": {
+            "description": "Theme changed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "theme": {
+                      "type": "string",
+                      "example": "Light"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -499,10 +534,7 @@
                     "example": "The Watch Spot Design"
                   }
                 },
-                "required": [
-                  "boardId",
-                  "title"
-                ]
+                "required": ["boardId", "title"]
               }
             }
           }
@@ -577,10 +609,7 @@
                     "example": "UPDATE TITLE The Watch Spot Design"
                   }
                 },
-                "required": [
-                  "boardId",
-                  "title"
-                ]
+                "required": ["boardId", "title"]
               }
             }
           }
