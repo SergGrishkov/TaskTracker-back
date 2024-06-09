@@ -19,7 +19,7 @@ const boardSchema = new mongoose.Schema(
       ref: "user",
     },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 export default mongoose.model("Board", boardSchema);
