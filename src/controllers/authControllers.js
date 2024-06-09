@@ -9,6 +9,7 @@ import sendVerificationToken from "../helpers/sendVerificationToken.js";
 import Board from "../models/Board.js";
 import Column from "../models/Column.js";
 import Task from "../models/Task.js";
+import sendEmail from "../helpers/feedback.js";
 
 export const register = errorWrapper(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -125,5 +126,19 @@ export const current = errorWrapper(async (req, res, next) => {
   return res.status(200).json({
     userId: req.user.id,
     boards: boardsArr,
+  });
+});
+export const feedback = errorWrapper(async (req, res, next) => {
+  const { email, message } = req.body;
+  const taskProjectEmail = "taskpro.project@gmail.com";
+  const verifyMail = {
+    to: "lysbrodya@gmail.com",
+    subject: "Mail support service",
+    html: `<p>Mail from:</p><br><p style="color: green"> ${email}</p><br><p>${message}</p>`,
+    text: `Mail from: ${email}.${message}`,
+  };
+  await sendEmail(verifyMail);
+  res.status(200).send({
+    message: "Your request is being processed, you will be contacted soon",
   });
 });
