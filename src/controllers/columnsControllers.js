@@ -23,7 +23,7 @@ export const addColumn = errorWrapper(async (req, res) => {
     throw HttpError(404, "No board for such column");
   }
 
-  const columnTitle = await Column.findOne({ title });
+  const columnTitle = await Column.findOne({ title, userId, boardId });
 
   if (columnTitle) {
     throw HttpError(409, "Try another title. This one is already used");
@@ -42,6 +42,7 @@ export const addColumn = errorWrapper(async (req, res) => {
 export const updateColumn = errorWrapper(async (req, res) => {
   const { title, boardId } = req.body;
   const { id: columnId } = req.params;
+  const { id: userId } = req.user;
 
   if (!columnId) {
     throw HttpError(404, "columnId is missing");
@@ -54,7 +55,7 @@ export const updateColumn = errorWrapper(async (req, res) => {
   }
 
   const newColumn = await Column.findOneAndUpdate(
-    { boardId },
+    { _id: columnId, boardId, userId },
     { title },
     { new: true }
   );
