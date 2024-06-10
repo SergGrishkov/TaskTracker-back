@@ -51,19 +51,25 @@ export const getOneBoard = errorWrapper(async (req, res) => {
 export const createBoard = errorWrapper(async (req, res) => {
   const { title, icon, enterImg } = req.body;
   const board = { title, icon, userId: req.user.id };
+
   const images = await Background.find();
 
-  let background = null;
+  let background = {};
   for (const img of images) {
     if (img._doc[enterImg]) {
-      background = img._doc[enterImg];
+      background[enterImg] = img._doc[enterImg];
       break;
     }
   }
+
+  if (Object.keys(background).length === 0) {
+    return res.status(404).send({ message: "Background not found" });
+  }
+
   const newBoard = await Board.create({ ...board, background });
+
   res.status(201).send(newBoard);
 });
-
 export const updateBoard = errorWrapper(async (req, res) => {
   const { id: boardId } = req.params;
   const { title, icon, background } = req.body;
