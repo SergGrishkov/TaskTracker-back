@@ -51,7 +51,12 @@ export const login = errorWrapper(async (req, res, next) => {
     expiresIn: "120h",
   });
   await User.findByIdAndUpdate(user._id, { token });
-  res.status(200).json({ token, user: { email, theme, name: user.name } });
+  res
+    .status(200)
+    .json({
+      token,
+      user: { email, theme, name: user.name, avatarURL: user.avatarURL },
+    });
 });
 
 export const logout = errorWrapper(async (req, res) => {
