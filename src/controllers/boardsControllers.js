@@ -3,10 +3,48 @@ import HttpError from "../helpers/HttpError.js";
 import { errorWrapper } from "../helpers/Wrapper.js";
 import Column from "../models/Column.js";
 import Task from "../models/Task.js";
+import _ from "lodash";
 
 export const getAllBoards = errorWrapper(async (req, res) => {
   const boards = await Board.find({ userId: req.user.id });
-  res.status(200).json(boards);
+
+  const sortedBoards = _.orderBy(boards, [(obj) => obj.createdAt], ["asc"]);
+
+  res.status(201).json(sortedBoards);
+});
+
+export const getOneBoard = errorWrapper(async (req, res) => {
+  const { id: userId } = req.user;
+  const { id: boardId } = req.params;
+
+  const tasks = await Task.find({ userId, boardId });
+  if (!tasks) {
+    throw HttpError(404, `Tasks not found.`);
+  }
+
+  const columns = await Column.find({ userId, boardId });
+  if (!columns) {
+    throw HttpError(404, `Columns not found.`);
+  }
+
+  const board = await Board.find({ _id: boardId, userId });
+  if (!board) {
+    throw HttpError(404, `Board not found.`);
+  }
+
+  const col = columns.map((c) => {
+    console.log(c._id);
+    return {
+      ...c._doc,
+      tasks: tasks.filter((t) => {
+        return t.columnId.toString() === c._id.toString();
+      }),
+    };
+  });
+  const boarlFull = board[0]._doc;
+  boarlFull.columns = col;
+
+  res.status(200).json(boarlFull);
 });
 
 export const createBoard = errorWrapper(async (req, res) => {

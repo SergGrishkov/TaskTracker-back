@@ -2,6 +2,7 @@ import express from "express";
 
 import {
   getAllBoards,
+  getOneBoard,
   createBoard,
   updateBoard,
   deleteBoard,
@@ -16,6 +17,7 @@ import {
 const router = express.Router();
 
 router.get("/", getAllBoards);
+router.get("/:id", validateId, getOneBoard);
 router.post("/", validateBody(createBoardSchema), createBoard);
 router.put("/:id", validateId, validateBody(updateBoardSchema), updateBoard);
 router.delete("/:id", validateId, deleteBoard);
