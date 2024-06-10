@@ -4,6 +4,7 @@ import { errorWrapper } from "../helpers/Wrapper.js";
 import Column from "../models/Column.js";
 import Task from "../models/Task.js";
 import _ from "lodash";
+import Background from "../models/Background.js";
 
 export const getAllBoards = errorWrapper(async (req, res) => {
   const boards = await Board.find({ userId: req.user.id });
@@ -50,8 +51,72 @@ export const getOneBoard = errorWrapper(async (req, res) => {
 export const createBoard = errorWrapper(async (req, res) => {
   const { title, icon, background } = req.body;
   const board = { title, icon, background, userId: req.user.id };
+  let newBackground;
+  // if (typeof board.background === undefined) {return}
+  if (board.background === "balloon") {
+    newBackground = await Background.findOne({
+      _id: "6665c3a5bf029eea930d5296",
+    });
+  } else if (board.background === "balloons-in-rocks") {
+    newBackground = await Background.findOne({
+      _id: "6665c3a5bf029eea930d5297",
+    });
+  } else if (board.background === "balls") {
+    newBackground = await Background.findOne({
+      _id: "6665c3a5bf029eea930d5298",
+    });
+  } else if (board.background === "bamboo") {
+    newBackground = await Background.findOne({
+      _id: "6665c3a5bf029eea930d5299",
+    });
+  } else if (board.background === "boat") {
+    newBackground = await Background.findOne({
+      _id: "6665c3a5bf029eea930d529a",
+    });
+  } else if (board.background === "bus-in-rocks") {
+    newBackground = await Background.findOne({
+      _id: "6665c3a5bf029eea930d529b",
+    });
+  } else if (board.background === "clouds") {
+    newBackground = await Background.findOne({
+      _id: "6665c3a5bf029eea930d529c",
+    });
+  } else if (board.background === "full-moon") {
+    newBackground = await Background.findOne({
+      _id: "6665c3a5bf029eea930d529d",
+    });
+  } else if (board.background === "new-moon") {
+    newBackground = await Background.findOne({
+      _id: "6665c3a5bf029eea930d529e",
+    });
+  } else if (board.background === "night-in-mountains") {
+    newBackground = await Background.findOne({
+      _id: "6665c3a5bf029eea930d529f",
+    });
+  } else if (board.background === "pink-flowers") {
+    newBackground = await Background.findOne({
+      _id: "6665c3a5bf029eea930d52a0",
+    });
+  } else if (board.background === "pink-tree") {
+    newBackground = await Background.findOne({
+      _id: "6665c3a5bf029eea930d52a1",
+    });
+  } else if (board.background === "rocks-in-sea") {
+    newBackground = await Background.findOne({
+      _id: "6665c3a5bf029eea930d52a2",
+    });
+  } else if (board.background === "sky-rocks") {
+    newBackground = await Background.findOne({
+      _id: "6665c3a5bf029eea930d52a3",
+    });
+  } else if (board.background === "yacht") {
+    newBackground = await Background.findOne({
+      _id: "6665c3a5bf029eea930d52a4",
+    });
+  }
 
-  const newBoard = await Board.create(board);
+  const newBoard = await Board.create({ ...board, newBackground });
+
   res.status(201).send(newBoard);
 });
 
