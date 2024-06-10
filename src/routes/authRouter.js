@@ -10,8 +10,8 @@ import {
 } from "../controllers/authControllers.js";
 import { checkAuth } from "../middlewares/checkAuth.js";
 import { feedbackSchema } from "../schemas/feedbackSchemas.js";
-import { changeTheme } from "../controllers/usersController.js";
-import { changeThemeSchema } from "../schemas/userSchemas.js";
+import { changeTheme, updateUser } from "../controllers/usersController.js";
+import { changeThemeSchema, updateUserSchema } from "../schemas/userSchemas.js";
 
 const authRouter = express.Router();
 
@@ -24,6 +24,13 @@ authRouter.patch(
   checkAuth,
   validateBody(changeThemeSchema),
   changeTheme
+);
+
+authRouter.put(
+  "/profile",
+  checkAuth,
+  validateBody(updateUserSchema),
+  updateUser
 );
 
 authRouter.get("/current", checkAuth, current);

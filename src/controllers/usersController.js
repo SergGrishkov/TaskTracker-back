@@ -4,7 +4,7 @@ import User from "../models/User.js";
 import Jimp from "jimp";
 import HttpError from "../helpers/HttpError.js";
 
-export const updateAvatar = errorWrapper(async (req, res, next) => {
+export const updateAvatar = errorWrapper(async (req, res) => {
   const { id, avatarURL: oldAvatarURL } = req.user;
   const { path: tempUpload, originalname } = req.file;
 
@@ -60,4 +60,33 @@ export const changeTheme = errorWrapper(async (req, res) => {
   const newUser = await User.findByIdAndUpdate(id, { theme }, { new: true });
 
   res.json(newUser);
+});
+
+export const updateUser = errorWrapper(async (req, res) => {
+  const { id: userId } = req.user;
+  const { name, email, password } = req.body;
+
+  if (Object.keys(req.body).length === 0) {
+    return res.status(400).json({
+      message: "Body must have at least one field",
+    });
+  }
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw HttpError(404, "No user with such ID");
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    {
+      name,
+      email,
+      password,
+    },
+    { new: true }
+  );
+
+  res.json(updatedUser);
 });
