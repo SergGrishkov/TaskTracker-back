@@ -10,6 +10,7 @@ import Board from "../models/Board.js";
 import Column from "../models/Column.js";
 import Task from "../models/Task.js";
 import sendEmail from "../helpers/feedback.js";
+import _ from "lodash";
 
 export const register = errorWrapper(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -51,12 +52,10 @@ export const login = errorWrapper(async (req, res, next) => {
     expiresIn: "120h",
   });
   await User.findByIdAndUpdate(user._id, { token });
-  res
-    .status(200)
-    .json({
-      token,
-      user: { email, theme, name: user.name, avatarURL: user.avatarURL },
-    });
+  res.status(200).json({
+    token,
+    user: { email, theme, name: user.name, avatarURL: user.avatarURL },
+  });
 });
 
 export const logout = errorWrapper(async (req, res) => {
@@ -109,27 +108,37 @@ export const resendVerifyEmail = errorWrapper(async (req, res) => {
 export const current = errorWrapper(async (req, res, next) => {
   await User.findOne(req.user);
   const boards = await Board.find({ userId: req.user.id });
-  const boardsArr = await Promise.all(
-    boards.map(async (board) => {
-      const boardId = board._id.toString();
-      const columns = await Column.find({ boardId });
+  if (boards.length === 0) {
+    return res.status(404).json({ message: "No boards found" });
+  }
+  const sortedBoards = _.orderBy(boards, [(obj) => obj.createdAt], ["asc"]);
+  const firstBoard = sortedBoards[0];
+  const boardId = firstBoard._id.toString();
+  const columns = await Column.find({ boardId });
 
-      const columnsArr = await Promise.all(
-        columns.map(async (column) => {
-          const columnid = column._id.toString();
-          const tasks = await Task.find({ columnId: columnid });
+  const columnsArr = await Promise.all(
+    columns.map(async (column) => {
+      const columnId = column._id.toString();
+      const tasks = await Task.find({ columnId });
 
-          return { ...column.toObject(), tasks };
-        })
-      );
-
-      return { ...board.toObject(), columns: columnsArr };
+      return { ...column.toObject(), tasks };
     })
   );
-
+  const firstBoardWithDetails = {
+    ...firstBoard.toObject(),
+    columns: columnsArr,
+  };
+  const remainingBoards = sortedBoards.slice(1).map((board) => {
+    const nextbord = { title: board.title, boardId: board._id.toString() };
+    return nextbord;
+  });
+  // console.log(remainingBoards);
   return res.status(200).json({
     userId: req.user.id,
-    boards: boardsArr,
+    email: req.user.email,
+    name: req.user.name,
+    firstBoard: firstBoardWithDetails,
+    remainingBoards,
   });
 });
 export const feedback = errorWrapper(async (req, res, next) => {
