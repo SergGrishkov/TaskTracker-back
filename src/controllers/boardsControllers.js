@@ -9,6 +9,26 @@ export const getAllBoards = errorWrapper(async (req, res) => {
   res.status(200).json(boards);
 });
 
+export const getCurrentBoard = errorWrapper(async (req, res) => {
+  const { id } = req.params;
+  const board = await Board.findOne({ _id: id, userId: req.user.id });
+  const boardId = board._id.toString();
+  const columns = await Column.find({ boardId });
+  const columnsArr = await Promise.all(
+    columns.map(async (column) => {
+      const columnid = column._id.toString();
+      const tasks = await Task.find({ columnId: columnid });
+      return { ...column.toObject(), tasks };
+    })
+  );
+  const boardObj = {
+    boardTitle: board.title,
+    boardId,
+    columns: [...columnsArr],
+  };
+  res.status(200).json(boardObj);
+});
+
 export const createBoard = errorWrapper(async (req, res) => {
   const { title, icon, background } = req.body;
   const board = { title, icon, background, userId: req.user.id };
