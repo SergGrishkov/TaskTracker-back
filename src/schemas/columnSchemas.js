@@ -21,3 +21,9 @@ export const updateColumnSchema = Joi.object({
     .required()
     .messages({ "any.required": "Missing required field: boardId" }),
 });
+
+export const deleteColumnSchema = Joi.object({
+  boardId: Joi.string()
+    .required()
+    .messages({ "any.required": "Missing required field: boardId" }),
+});
