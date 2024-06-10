@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import HttpError from "../helpers/HttpError.js";
 
 export const checkAuth = async (req, res, next) => {
   try {
@@ -30,7 +29,7 @@ export const checkAuth = async (req, res, next) => {
 
       req.user = {
         id: user._id,
-        email: user.email
+        email: user.email,
       };
       next();
     });

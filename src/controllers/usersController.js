@@ -63,7 +63,7 @@ export const changeTheme = errorWrapper(async (req, res) => {
 });
 
 export const updateUser = errorWrapper(async (req, res) => {
-  const { id: userId } = req.params;
+  const { id: userId } = req.user;
   const { name, email, password } = req.body;
 
   if (Object.keys(req.body).length === 0) {
@@ -84,7 +84,6 @@ export const updateUser = errorWrapper(async (req, res) => {
       name,
       email,
       password,
-      avatar,
     },
     { new: true }
   );

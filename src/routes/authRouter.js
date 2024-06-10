@@ -12,7 +12,6 @@ import { checkAuth } from "../middlewares/checkAuth.js";
 import { feedbackSchema } from "../schemas/feedbackSchemas.js";
 import { changeTheme, updateUser } from "../controllers/usersController.js";
 import { changeThemeSchema, updateUserSchema } from "../schemas/userSchemas.js";
-import isValidId from "../helpers/validateId.js";
 
 const authRouter = express.Router();
 
@@ -28,8 +27,8 @@ authRouter.patch(
 );
 
 authRouter.put(
-  "/change/:id",
-  isValidId,
+  "/profile",
+  checkAuth,
   validateBody(updateUserSchema),
   updateUser
 );
