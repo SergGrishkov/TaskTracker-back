@@ -17,7 +17,7 @@ import {
 const router = express.Router();
 
 router.get("/", getAllBoards);
-router.get("/:id", getOneBoard);
+router.get("/:id", validateId, getOneBoard);
 router.post("/", validateBody(createBoardSchema), createBoard);
 router.put("/:id", validateId, validateBody(updateBoardSchema), updateBoard);
 router.delete("/:id", validateId, deleteBoard);
