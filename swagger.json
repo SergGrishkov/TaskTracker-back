@@ -1135,6 +1135,22 @@
             "description": "Task ID for update"
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "columnId": {
+                    "type": "string",
+                    "example": "6660bea58deb72fa3d250e19"
+                  }
+                },
+                "required": ["columnId"]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Task removed.",
