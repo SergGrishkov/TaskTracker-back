@@ -118,9 +118,9 @@ export const deleteBoard = errorWrapper(async (req, res) => {
 });
 
 export const getAllBackgrounds = errorWrapper(async (req, res) => {
-  const icons = await Background.find();
-
   console.log(2);
+
+  const icons = await Background.find();
 
   res.json(icons);
 });
