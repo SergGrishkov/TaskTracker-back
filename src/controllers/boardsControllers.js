@@ -118,16 +118,9 @@ export const deleteBoard = errorWrapper(async (req, res) => {
 });
 
 export const getAllBackgrounds = errorWrapper(async (req, res) => {
+  const icons = await Background.find();
+
   console.log(2);
 
-  // const { _id: userId } = req.user;
-
-  // if (!userId) {
-  //   throw HttpError(404);
-  // }
-
-  const board = await Board.find({ userId });
-  console.log(2);
-
-  res.json(board);
+  res.json(icons);
 });
