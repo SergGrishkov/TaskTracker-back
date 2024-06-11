@@ -115,9 +115,7 @@ export const getAllBackgrounds = errorWrapper(async (req, res) => {
     throw HttpError(404);
   }
 
-  const boards = await Board.find({ userId });
+  const board = await Board.find({ userId });
 
-  const backgrounds = boards.map((board) => board.background);
-
-  res.json(backgrounds);
+  res.json(board);
 });
