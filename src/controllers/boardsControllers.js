@@ -34,7 +34,6 @@ export const getOneBoard = errorWrapper(async (req, res) => {
   }
 
   const col = columns.map((c) => {
-    console.log(c._id);
     return {
       ...c._doc,
       tasks: tasks.filter((t) => {
@@ -49,25 +48,29 @@ export const getOneBoard = errorWrapper(async (req, res) => {
 });
 
 export const createBoard = errorWrapper(async (req, res) => {
-  const { title, icon, enterImg } = req.body;
+  const { title, icon, background } = req.body;
   const board = { title, icon, userId: req.user.id };
-  const images = await Background.find();
 
-  let background = null;
-  for (const img of images) {
-    if (img._doc[enterImg]) {
-      background = img._doc[enterImg];
-      break;
-    }
+  const images = (await Background.find({})).map((i) => i.toObject());
+
+  let backgroundObj = images.find((f) => {
+    return f[background] !== undefined;
+  });
+
+  if (Object.keys(background).length === 0) {
+    return res.status(404).send({ message: "Background not found" });
   }
-  const newBoard = await Board.create({ ...board, background });
+
+  board.background = backgroundObj;
+  const newBoard = await Board.create({ ...board });
+
   res.status(201).send(newBoard);
 });
 
 export const updateBoard = errorWrapper(async (req, res) => {
   const { id: boardId } = req.params;
   const { title, icon, background } = req.body;
-  const board = { title, icon, background };
+  const board = { title, icon };
 
   if (Object.keys(req.body).length === 0) {
     throw HttpError(400, "Body must have at least one field");
@@ -80,6 +83,12 @@ export const updateBoard = errorWrapper(async (req, res) => {
   if (existingBoard.userId.toString() !== req.user.id.toString()) {
     throw HttpError(403, "Authentication problem, choose your board ");
   }
+  const images = (await Background.find({})).map((i) => i.toObject());
+
+  let backgroundObj = images.find((f) => {
+    return f[background] !== undefined;
+  });
+  board.background = backgroundObj;
   const updatedBoard = await Board.findByIdAndUpdate(boardId, board, {
     new: true,
   });

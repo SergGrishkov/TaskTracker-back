@@ -9,6 +9,7 @@ export const updateUserSchema = Joi.object({
 export const changeThemeSchema = Joi.object({
   theme: Joi.string()
     .required()
+    .trim()
     .messages({ "any.required": "Missing required field: theme" })
     .valid("Light", "Dark", "Violet"),
 });
