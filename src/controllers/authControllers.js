@@ -9,6 +9,7 @@ import sendVerificationToken from "../helpers/sendVerificationToken.js";
 import Board from "../models/Board.js";
 import Column from "../models/Column.js";
 import Task from "../models/Task.js";
+import Background from "../models/Background.js";
 import sendEmail from "../helpers/feedback.js";
 import _ from "lodash";
 
@@ -116,6 +117,7 @@ export const current = errorWrapper(async (req, res, next) => {
   const sortedBoards = _.orderBy(boards, [(obj) => obj.createdAt], ["asc"]).map(
     (b) => b.toObject()
   );
+
   const boardId = sortedBoards[0]._id;
 
   const tasks = await Task.find({ userId, boardId });
@@ -128,9 +130,8 @@ export const current = errorWrapper(async (req, res, next) => {
         return t.columnId.toString() === c._id.toString();
       }),
     };
-  });
-  sortedBoards[0].columns = col;
 
+  sortedBoards[0].columns = col;
   res.json(sortedBoards);
 });
 
