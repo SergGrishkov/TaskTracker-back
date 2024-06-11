@@ -130,6 +130,7 @@ export const current = errorWrapper(async (req, res, next) => {
         return t.columnId.toString() === c._id.toString();
       }),
     };
+  });
 
   sortedBoards[0].columns = col;
   res.json(sortedBoards);
