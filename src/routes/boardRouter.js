@@ -6,6 +6,7 @@ import {
   createBoard,
   updateBoard,
   deleteBoard,
+  getAllBackgrounds,
 } from "../controllers/boardsControllers.js";
 
 import validateId from "../helpers/validateId.js";
@@ -14,6 +15,7 @@ import {
   createBoardSchema,
   updateBoardSchema,
 } from "../schemas/boardSchemas.js";
+
 const router = express.Router();
 
 router.get("/", getAllBoards);
@@ -21,5 +23,6 @@ router.get("/:id", validateId, getOneBoard);
 router.post("/", validateBody(createBoardSchema), createBoard);
 router.put("/:id", validateId, validateBody(updateBoardSchema), updateBoard);
 router.delete("/:id", validateId, deleteBoard);
+router.get("/backgrounds", getAllBackgrounds);
 
 export default router;

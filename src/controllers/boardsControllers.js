@@ -98,3 +98,17 @@ export const deleteBoard = errorWrapper(async (req, res) => {
 
   res.send(deletedBoard);
 });
+
+export const getAllBackgrounds = errorWrapper(async (req, res) => {
+  const { id: userId } = req.user;
+
+  if (!userId) {
+    throw HttpError(404);
+  }
+
+  const boards = await Board.find({ userId });
+
+  const backgrounds = boards.map((board) => board.background);
+
+  res.json(backgrounds);
+});
