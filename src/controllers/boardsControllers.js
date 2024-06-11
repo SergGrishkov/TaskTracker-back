@@ -4,6 +4,7 @@ import { errorWrapper } from "../helpers/Wrapper.js";
 import Column from "../models/Column.js";
 import Task from "../models/Task.js";
 import _ from "lodash";
+import Background from "../models/Background.js";
 
 export const getAllBoards = errorWrapper(async (req, res) => {
   const boards = await Board.find({ userId: req.user.id });
@@ -48,10 +49,18 @@ export const getOneBoard = errorWrapper(async (req, res) => {
 });
 
 export const createBoard = errorWrapper(async (req, res) => {
-  const { title, icon, background } = req.body;
-  const board = { title, icon, background, userId: req.user.id };
+  const { title, icon, enterImg } = req.body;
+  const board = { title, icon, userId: req.user.id };
+  const images = await Background.find();
 
-  const newBoard = await Board.create(board);
+  let background = null;
+  for (const img of images) {
+    if (img._doc[enterImg]) {
+      background = img._doc[enterImg];
+      break;
+    }
+  }
+  const newBoard = await Board.create({ ...board, background });
   res.status(201).send(newBoard);
 });
 

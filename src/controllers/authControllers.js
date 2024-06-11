@@ -9,6 +9,7 @@ import sendVerificationToken from "../helpers/sendVerificationToken.js";
 import Board from "../models/Board.js";
 import Column from "../models/Column.js";
 import Task from "../models/Task.js";
+import Background from "../models/Background.js";
 import sendEmail from "../helpers/feedback.js";
 import _ from "lodash";
 
@@ -132,7 +133,7 @@ export const current = errorWrapper(async (req, res, next) => {
     const nextbord = { title: board.title, boardId: board._id.toString() };
     return nextbord;
   });
-  // console.log(remainingBoards);
+
   return res.status(200).json({
     userId: req.user.id,
     email: req.user.email,
