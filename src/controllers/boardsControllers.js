@@ -56,14 +56,13 @@ export const createBoard = errorWrapper(async (req, res) => {
   let backgroundObj = images.find((f) => {
     return f[background] !== undefined;
   });
-  
 
   if (Object.keys(background).length === 0) {
     return res.status(404).send({ message: "Background not found" });
   }
 
   board.background = backgroundObj;
-  const newBoard = await Board.create({...board});
+  const newBoard = await Board.create({ ...board });
 
   res.status(201).send(newBoard);
 });
@@ -71,7 +70,7 @@ export const createBoard = errorWrapper(async (req, res) => {
 export const updateBoard = errorWrapper(async (req, res) => {
   const { id: boardId } = req.params;
   const { title, icon, background } = req.body;
-  const board = { title, icon, background };
+  const board = { title, icon };
 
   if (Object.keys(req.body).length === 0) {
     throw HttpError(400, "Body must have at least one field");
@@ -84,6 +83,12 @@ export const updateBoard = errorWrapper(async (req, res) => {
   if (existingBoard.userId.toString() !== req.user.id.toString()) {
     throw HttpError(403, "Authentication problem, choose your board ");
   }
+  const images = (await Background.find({})).map((i) => i.toObject());
+
+  let backgroundObj = images.find((f) => {
+    return f[background] !== undefined;
+  });
+  board.background = backgroundObj;
   const updatedBoard = await Board.findByIdAndUpdate(boardId, board, {
     new: true,
   });
