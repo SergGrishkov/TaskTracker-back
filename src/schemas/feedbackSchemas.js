@@ -8,5 +8,5 @@ export const feedbackSchema = Joi.object({
     .trim()
     .max(250)
     .messages({ "any.required": "Missing required field: email" }),
-  message: Joi.string(),
+  message: Joi.string().trim(),
 });

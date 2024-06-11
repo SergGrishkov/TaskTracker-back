@@ -107,41 +107,34 @@ export const resendVerifyEmail = errorWrapper(async (req, res) => {
 });
 
 export const current = errorWrapper(async (req, res, next) => {
-  await User.findOne(req.user);
-  const boards = await Board.find({ userId: req.user.id });
+  const { id: userId } = req.user;
+
+  const boards = await Board.find({ userId });
   if (boards.length === 0) {
     return res.status(404).json({ message: "No boards found" });
   }
-  const sortedBoards = _.orderBy(boards, [(obj) => obj.createdAt], ["asc"]);
-  const firstBoard = sortedBoards[0];
-  const boardId = firstBoard._id.toString();
-  const columns = await Column.find({ boardId });
 
-  const columnsArr = await Promise.all(
-    columns.map(async (column) => {
-      const columnId = column._id.toString();
-      const tasks = await Task.find({ columnId });
-
-      return { ...column.toObject(), tasks };
-    })
+  const sortedBoards = _.orderBy(boards, [(obj) => obj.createdAt], ["asc"]).map(
+    (b) => b.toObject()
   );
-  const firstBoardWithDetails = {
-    ...firstBoard.toObject(),
-    columns: columnsArr,
-  };
-  const remainingBoards = sortedBoards.slice(1).map((board) => {
-    const nextbord = { title: board.title, boardId: board._id.toString() };
-    return nextbord;
-  });
 
-  return res.status(200).json({
-    userId: req.user.id,
-    email: req.user.email,
-    name: req.user.name,
-    firstBoard: firstBoardWithDetails,
-    remainingBoards,
-  });
+  const boardId = sortedBoards[0]._id;
+
+  const tasks = await Task.find({ userId, boardId });
+  const columns = await Column.find({ userId, boardId });
+
+  const col = columns.map((c) => {
+    return {
+      ...c._doc,
+      tasks: tasks.filter((t) => {
+        return t.columnId.toString() === c._id.toString();
+      }),
+    };
+
+  sortedBoards[0].columns = col;
+  res.json(sortedBoards);
 });
+
 export const feedback = errorWrapper(async (req, res, next) => {
   const { email, message } = req.body;
   const taskProjectEmail = "taskpro.project@gmail.com";

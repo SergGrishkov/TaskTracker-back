@@ -34,7 +34,6 @@ export const getOneBoard = errorWrapper(async (req, res) => {
   }
 
   const col = columns.map((c) => {
-    console.log(c._id);
     return {
       ...c._doc,
       tasks: tasks.filter((t) => {
