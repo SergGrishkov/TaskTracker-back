@@ -5,6 +5,7 @@ import Column from "../models/Column.js";
 import Task from "../models/Task.js";
 import _ from "lodash";
 import Background from "../models/Background.js";
+import Icon from "../models/Icon.js";
 
 export const getAllBoards = errorWrapper(async (req, res) => {
   const boards = await Board.find({ userId: req.user.id });
@@ -115,4 +116,9 @@ export const deleteBoard = errorWrapper(async (req, res) => {
   }
 
   res.send(deletedBoard);
+});
+
+export const getAllBackgrounds = errorWrapper(async (req, res) => {
+  const backgrounds = await Icon.find();
+  res.json(backgrounds);
 });

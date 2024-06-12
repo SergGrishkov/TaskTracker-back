@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import { errorWrapper } from "../helpers/Wrapper.js";
 import Column from "../models/Column.js";
 import Task from "../models/Task.js";
@@ -12,7 +14,13 @@ export const getAllColumns = errorWrapper(async (req, res) => {
     throw HttpError(401);
   }
 
-  res.json(allColumns);
+  const sortedColumns = _.orderBy(
+    allColumns,
+    [(obj) => obj.createdAt],
+    ["asc"]
+  );
+
+  res.json(sortedColumns);
 });
 
 export const addColumn = errorWrapper(async (req, res) => {
