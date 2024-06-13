@@ -3,13 +3,9 @@ import { errorWrapper } from "../helpers/Wrapper.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import gravatar from "gravatar";
-import crypto from "crypto";
-import sendVerificationToken from "../helpers/sendVerificationToken.js";
 import Board from "../models/Board.js";
 import Column from "../models/Column.js";
 import Task from "../models/Task.js";
-import Background from "../models/Background.js";
 import sendEmail from "../helpers/feedback.js";
 import _ from "lodash";
 
@@ -22,13 +18,11 @@ export const register = errorWrapper(async (req, res, next) => {
   }
 
   const passHash = await bcrypt.hash(password, 10);
-  const avatarURL = gravatar.url(email);
 
-  const newUser = User.create({
+  await User.create({
     name,
     email,
     password: passHash,
-    avatarURL,
   });
 
   res.status(201).json({ user: { name, email } });
@@ -81,28 +75,6 @@ export const verifyEmail = errorWrapper(async (req, res) => {
 
   res.status(200).json({
     message: "Verification successful",
-  });
-});
-
-export const resendVerifyEmail = errorWrapper(async (req, res) => {
-  const { email } = req.body;
-  const user = await User.findOne({ email });
-
-  if (!user) {
-    throw HttpError(404, "User not found");
-  }
-
-  if (user.verify) {
-    throw HttpError(400, "Verification has already been passed");
-  }
-
-  const verificationToken = crypto.randomUUID();
-  user.verificationToken = verificationToken;
-  await user.save();
-
-  await sendVerificationToken(email, user.verificationToken);
-  res.json({
-    message: "Verify email sent",
   });
 });
 
