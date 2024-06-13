@@ -20,6 +20,4 @@ const columnSchema = mongoose.Schema(
   { versionKey: false, timestamps: true }
 );
 
-columnSchema.index({ userId: 1, boardId: 1, title: 1 }, { unique: true });
-
 export default mongoose.model("Column", columnSchema);

@@ -18,7 +18,6 @@ export const taskCreateSchema = Joi.object({
     .trim()
     .messages({ "any.required": "Missing required field: description" }),
   color: Joi.string()
-    .default("1")
     .required()
     .messages({ "any.required": "Missing required field: color" }),
   deadline: Joi.string()

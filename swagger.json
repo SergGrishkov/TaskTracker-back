@@ -311,8 +311,38 @@
                       "example": "Star"
                     },
                     "background": {
-                      "type": "string",
-                      "example": "Sakura"
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "example": "6662e78bbde2a294d32be34f"
+                        },
+                        "balls": {
+                          "properties": {
+                            "desc": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "desc2x": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "icons": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "mobl": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "mobl2x": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "tablet": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "tablet2x": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            }
+                          }
+                        }
+                      }
                     },
                     "createdAt": {
                       "type": "string",
@@ -461,6 +491,34 @@
                     "updatedAt": {
                       "type": "string",
                       "example": "2024-06-07T10:57:15.972Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/boards/backgrounds": {
+      "get": {
+        "tags": ["Boards"],
+        "summary": "Get backgrounds for board",
+        "responses": {
+          "200": {
+            "description": "Get backgrounds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "6662e78bbde2a294d32be34f"
+                    },
+                    "balls": {
+                      "type": "string",
+                      "example": "https://res.cloudinary.com/dshslvnpv/image/upload/c_fill,h_28,w_28/icons/xsvbhu9"
                     }
                   }
                 }
@@ -892,10 +950,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "boardId": {
-                    "type": "string",
-                    "example": "6660bea58deb72fa3d250e18"
-                  },
                   "columnId": {
                     "type": "string",
                     "example": "6660bea58deb72fa3d250e19"
@@ -918,7 +972,6 @@
                   }
                 },
                 "required": [
-                  "boardId",
                   "columnId",
                   "title",
                   "description",
@@ -1001,6 +1054,95 @@
         "responses": {
           "200": {
             "description": "Task removed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "6662e78bbde2a294d32be34f"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "example": "6662e436f19539da7e20e32e"
+                    },
+                    "boardId": {
+                      "type": "string",
+                      "example": "6660bea58deb72fa3d250e18"
+                    },
+                    "columnId": {
+                      "type": "string",
+                      "example": "6660bea58deb72fa3d250e19"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "The Watch Spot Design"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
+                    },
+                    "color": {
+                      "type": "string",
+                      "example": "8FA1D06"
+                    },
+                    "deadline": {
+                      "type": "string",
+                      "example": "2024-06-07"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Tasks"],
+        "summary": "Change column for task by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Task ID for update"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "columnId": {
+                    "type": "string",
+                    "example": "6660bea58deb72fa3d250e19"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "In Progress"
+                  }
+                },
+                "required": ["columnId", "title"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Task changed column.",
             "content": {
               "application/json": {
                 "schema": {
