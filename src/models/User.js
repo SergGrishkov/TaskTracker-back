@@ -17,7 +17,7 @@ const userSchema = new Schema(
     },
     theme: {
       type: String,
-      required: [true, "Email is required"],
+      required: [true, "Theme is required"],
       enum: ["Light", "Dark", "Violet"],
       default: "Light",
     },
