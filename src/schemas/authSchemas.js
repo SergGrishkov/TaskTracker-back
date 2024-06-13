@@ -9,8 +9,8 @@ export const registerUserSchema = Joi.object({
     .trim()
     .messages({ "any.required": "Missing required field: email" }),
   password: Joi.string()
-    .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
     .required()
+    .min(6)
     .messages({ "any.required": "Missing required field: password" }),
   theme: Joi.string().trim().valid("Light", "Dark", "Violet"),
 });
@@ -23,7 +23,7 @@ export const loginUserSchema = Joi.object({
     .trim()
     .messages({ "any.required": "Missing required field: email" }),
   password: Joi.string()
-    .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+    .min(6)
     .required()
     .messages({ "any.required": "Missing required field: password" }),
 });
