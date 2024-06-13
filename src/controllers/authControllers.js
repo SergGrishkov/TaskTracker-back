@@ -19,13 +19,20 @@ export const register = errorWrapper(async (req, res, next) => {
 
   const passHash = await bcrypt.hash(password, 10);
 
-  await User.create({
+  const newUser = await User.create({
     name,
     email,
     password: passHash,
   });
 
-  res.status(201).json({ user: { name, email } });
+  console.log(newUser);
+
+  const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+    expiresIn: "120h",
+  });
+  await User.findByIdAndUpdate(newUser._id, { token });
+
+  res.status(201).json({ token, user: { email, name: newUser.name } });
 });
 
 export const login = errorWrapper(async (req, res, next) => {
