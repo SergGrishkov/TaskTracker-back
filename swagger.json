@@ -436,10 +436,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "file": {
+                  "avatar": {
                     "type": "string",
                     "format": "binary",
-                    "description": "Файл для завантаження"
+                    "description": "File for upload"
                   },
                   "name": {
                     "type": "string",
