@@ -426,7 +426,7 @@
       }
     },
     "/users/profile": {
-      "patch": {
+      "put": {
         "tags": ["User Auth"],
         "summary": "Update user profile",
         "consumes": ["multipart/form-data"],
