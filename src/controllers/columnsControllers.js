@@ -13,7 +13,13 @@ export const getAllColumns = errorWrapper(async (req, res) => {
     throw HttpError(401);
   }
 
-  res.json(allColumns);
+  const sortedColumns = _.orderBy(
+    allColumns,
+    [(obj) => obj.createdAt],
+    ["asc"]
+  );
+
+  res.json(sortedColumns);
 });
 
 export const addColumn = errorWrapper(async (req, res) => {
@@ -66,10 +72,16 @@ export const updateColumn = errorWrapper(async (req, res) => {
 
 export const deleteColumn = errorWrapper(async (req, res) => {
   const { id: columnId } = req.params;
+  const { id: userId } = req.user;
+  const { boardId } = req.body;
 
   await Task.deleteMany({ columnId });
 
-  const deletedColumn = await Column.findByIdAndDelete({ _id: columnId });
+  const deletedColumn = await Column.findOneAndDelete({
+    _id: columnId,
+    boardId,
+    userId,
+  });
 
   if (!deletedColumn) {
     throw HttpError(

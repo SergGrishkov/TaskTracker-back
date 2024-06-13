@@ -58,13 +58,12 @@ export const updateTask = errorWrapper(async (req, resp) => {
 export const deleteTask = errorWrapper(async (req, resp) => {
   const { id: userId } = req.user;
   const { id } = req.params;
-  const { columnId, boardId } = req.body;
+  const { columnId } = req.body;
 
   const removedTask = await Task.findOneAndDelete({
     _id: id,
     userId,
     columnId,
-    boardId,
   });
   if (!removedTask) {
     throw HttpError(404, `Task with id: ${id} not found and not removed`);

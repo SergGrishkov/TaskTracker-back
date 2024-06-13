@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import HttpError from "../helpers/HttpError.js";
 
 export const checkAuth = async (req, res, next) => {
   try {
@@ -20,14 +19,17 @@ export const checkAuth = async (req, res, next) => {
 
       const user = await User.findById(decode.id);
 
-      if (!user && user.token !== token) {
+      if (user === null) {
+        return res.status(401).send({ message: "Invalid token" });
+      }
+
+      if (user.token !== token) {
         return res.status(401).send({ message: "Invalid token" });
       }
 
       req.user = {
         id: user._id,
         email: user.email,
-        subscription: user.subscription,
       };
       next();
     });
