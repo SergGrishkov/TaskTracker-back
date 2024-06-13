@@ -32,7 +32,7 @@ authRouter.put(
   "/profile",
   checkAuth,
   validateBody(updateUserSchema),
-  uploadFile.single("file"),
+  uploadFile.single("avatar"),
   updateUser
 );
 
