@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { errorWrapper } from "../helpers/Wrapper.js";
 import Column from "../models/Column.js";
 import Task from "../models/Task.js";
@@ -12,18 +13,24 @@ export const getAllColumns = errorWrapper(async (req, res) => {
     throw HttpError(401);
   }
 
-  res.json(allColumns);
+  const sortedColumns = _.orderBy(
+    allColumns,
+    [(obj) => obj.createdAt],
+    ["asc"]
+  );
+
+  res.json(sortedColumns);
 });
 
 export const addColumn = errorWrapper(async (req, res) => {
-  const { id } = req.user;
+  const { id: userId } = req.user;
   const { title, boardId } = req.body;
 
   if (!boardId) {
     throw HttpError(404, "No board for such column");
   }
 
-  const columnTitle = await Column.findOne({ title });
+  const columnTitle = await Column.findOne({ title, userId, boardId });
 
   if (columnTitle) {
     throw HttpError(409, "Try another title. This one is already used");
@@ -40,8 +47,9 @@ export const addColumn = errorWrapper(async (req, res) => {
 });
 
 export const updateColumn = errorWrapper(async (req, res) => {
-  const { title } = req.body;
+  const { title, boardId } = req.body;
   const { id: columnId } = req.params;
+  const { id: userId } = req.user;
 
   if (!columnId) {
     throw HttpError(404, "columnId is missing");
@@ -53,8 +61,8 @@ export const updateColumn = errorWrapper(async (req, res) => {
     throw HttpError(404, `Column with id: ${columnId} not found`);
   }
 
-  const newColumn = await Column.findByIdAndUpdate(
-    columnId,
+  const newColumn = await Column.findOneAndUpdate(
+    { _id: columnId, boardId, userId },
     { title },
     { new: true }
   );
@@ -64,10 +72,16 @@ export const updateColumn = errorWrapper(async (req, res) => {
 
 export const deleteColumn = errorWrapper(async (req, res) => {
   const { id: columnId } = req.params;
+  const { id: userId } = req.user;
+  const { boardId } = req.body;
 
   await Task.deleteMany({ columnId });
 
-  const deletedColumn = await Column.findByIdAndDelete({ _id: columnId });
+  const deletedColumn = await Column.findOneAndDelete({
+    _id: columnId,
+    boardId,
+    userId,
+  });
 
   if (!deletedColumn) {
     throw HttpError(

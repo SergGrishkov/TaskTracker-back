@@ -9,6 +9,9 @@ import sendVerificationToken from "../helpers/sendVerificationToken.js";
 import Board from "../models/Board.js";
 import Column from "../models/Column.js";
 import Task from "../models/Task.js";
+import Background from "../models/Background.js";
+import sendEmail from "../helpers/feedback.js";
+import _ from "lodash";
 
 export const register = errorWrapper(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -49,9 +52,11 @@ export const login = errorWrapper(async (req, res, next) => {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: "120h",
   });
-
   await User.findByIdAndUpdate(user._id, { token });
-  res.status(200).json({ token, user: { email, theme } });
+  res.status(200).json({
+    token,
+    user: { email, theme, name: user.name, avatarURL: user.avatarURL },
+  });
 });
 
 export const logout = errorWrapper(async (req, res) => {
@@ -102,29 +107,46 @@ export const resendVerifyEmail = errorWrapper(async (req, res) => {
 });
 
 export const current = errorWrapper(async (req, res, next) => {
-  await User.findOne(req.user);
-  const boards = await Board.find({ userId: req.user.id });
-  const boardsArr = await Promise.all(
-    boards.map(async (board) => {
-      const boardId = board._id.toString();
-      const columns = await Column.find({ boardId });
+  const { id: userId } = req.user;
 
-      const columnsArr = await Promise.all(
-        columns.map(async (column) => {
-          const columnid = column._id.toString();
-          const tasks = await Task.find({ columnId: columnid });
-          console.log(tasks);
+  const boards = await Board.find({ userId });
+  if (boards.length === 0) {
+    return res.status(404).json({ message: "No boards found" });
+  }
 
-          return { ...column.toObject(), tasks };
-        })
-      );
-
-      return { ...board.toObject(), columns: columnsArr };
-    })
+  const sortedBoards = _.orderBy(boards, [(obj) => obj.createdAt], ["asc"]).map(
+    (b) => b.toObject()
   );
 
-  return res.status(200).json({
-    userId: req.user.id,
-    boards: boardsArr,
+  const boardId = sortedBoards[0]._id;
+
+  const tasks = await Task.find({ userId, boardId });
+  const columns = await Column.find({ userId, boardId });
+
+  const col = columns.map((c) => {
+    return {
+      ...c._doc,
+      tasks: tasks.filter((t) => {
+        return t.columnId.toString() === c._id.toString();
+      }),
+    };
+  });
+
+  sortedBoards[0].columns = col;
+  res.json(sortedBoards);
+});
+
+export const feedback = errorWrapper(async (req, res, next) => {
+  const { email, message } = req.body;
+  const taskProjectEmail = "taskpro.project@gmail.com";
+  const verifyMail = {
+    to: "lysbrodya@gmail.com",
+    subject: "Mail support service",
+    html: `<p>Mail from:</p><p style="color: green"> ${email}</p><p>message:</p><p style="color: red">${message}</p>`,
+    text: `Mail from: ${email}.${message}`,
+  };
+  await sendEmail(verifyMail);
+  res.status(200).send({
+    message: "Your request is being processed, you will be contacted soon",
   });
 });

@@ -18,8 +18,8 @@ export const taskCreateSchema = Joi.object({
     .trim()
     .messages({ "any.required": "Missing required field: description" }),
   color: Joi.string()
-    .default("1")
     .required()
+    .trim()
     .messages({ "any.required": "Missing required field: color" }),
   deadline: Joi.string()
     .required()
@@ -28,6 +28,9 @@ export const taskCreateSchema = Joi.object({
 });
 
 export const taskUpdateSchema = Joi.object({
+  boardId: Joi.string()
+    .required()
+    .messages({ "any.required": "Missing required field: boardId" }),
   columnId: Joi.string()
     .required()
     .messages({ "any.required": "Missing required field: columnId" }),
@@ -42,8 +45,8 @@ export const taskUpdateSchema = Joi.object({
     .trim()
     .messages({ "any.required": "Missing required field: description" }),
   color: Joi.string()
-    .default("1")
     .required()
+    .trim()
     .messages({ "any.required": "Missing required field: color" }),
   deadline: Joi.string()
     .required()
@@ -55,6 +58,9 @@ export const taskUpdateTitleSchema = Joi.object({
   boardId: Joi.string()
     .required()
     .messages({ "any.required": "Missing required field: boardId" }),
+  columnId: Joi.string()
+    .required()
+    .messages({ "any.required": "Missing required field: columnId" }),
   title: Joi.string()
     .required()
     .max(50)

@@ -12,9 +12,18 @@ export const createColumnSchema = Joi.object({
 });
 
 export const updateColumnSchema = Joi.object({
-    title: Joi.string()
+  title: Joi.string()
     .lowercase()
     .trim()
     .required()
     .messages({ "any.required": "Missing required field: title" }),
+  boardId: Joi.string()
+    .required()
+    .messages({ "any.required": "Missing required field: boardId" }),
+});
+
+export const deleteColumnSchema = Joi.object({
+  boardId: Joi.string()
+    .required()
+    .messages({ "any.required": "Missing required field: boardId" }),
 });

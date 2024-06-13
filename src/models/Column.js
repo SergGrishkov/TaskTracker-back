@@ -15,7 +15,6 @@ const columnSchema = mongoose.Schema(
     title: {
       type: String,
       required: [true, "This field should be filled!"],
-      unique: true,
     },
   },
   { versionKey: false, timestamps: true }
