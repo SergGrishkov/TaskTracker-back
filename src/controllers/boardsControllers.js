@@ -99,6 +99,7 @@ export const updateBoard = errorWrapper(async (req, res) => {
 
   res.send(updatedBoard);
 });
+
 export const deleteBoard = errorWrapper(async (req, res) => {
   const { id: boardId } = req.params;
   const existingBoard = await Board.findById(boardId);
