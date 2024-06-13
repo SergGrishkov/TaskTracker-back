@@ -4,6 +4,7 @@ export const updateUserSchema = Joi.object({
   name: Joi.string(),
   password: Joi.string().min(6),
   email: Joi.string().email(),
+  avatar: Joi.binary()
 });
 
 export const changeThemeSchema = Joi.object({
