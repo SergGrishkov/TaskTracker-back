@@ -30,20 +30,10 @@ export const updateAvatar = errorWrapper(async (req, res) => {
   });
 });
 
-async function deleteAvatar(oldAvatarURL) {
-  if (oldAvatarURL && !oldAvatarURL.includes("gravatar")) {
-    const oldAvatarFullName = path.resolve("public", oldAvatarURL);
-
-    try {
-      await fs.access(oldAvatarFullName);
-      await fs.unlink(oldAvatarFullName);
-    } catch (error) {}
-  }
-}
 
 async function resizeImage(imagePath, width, height) {
   const image = await Jimp.read(imagePath);
-  await image.resize(width, height);
+  image.resize(width, height);
   await image.writeAsync(imagePath);
 }
 
