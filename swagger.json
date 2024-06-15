@@ -1691,7 +1691,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "columnId": {
+                  "boardId": {
                     "type": "string",
                     "example": "6660bea58deb72fa3d250e19"
                   },
@@ -1700,7 +1700,7 @@
                     "example": "In Progress"
                   }
                 },
-                "required": ["columnId", "title"]
+                "required": ["boardId", "title"]
               }
             }
           }
