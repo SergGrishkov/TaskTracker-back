@@ -77,7 +77,7 @@ export const updateTaskColumnIdByTaskId = errorWrapper(async (req, resp) => {
   const { id: taskId } = req.params;
   const { title, columnId } = req.body;
 
-  const column = await Column.findOne({ title, userId, columnId });
+  const column = await Column.findOne({ title, userId, _id: columnId });
   if (!column) {
     throw HttpError(404, `Column with title: '${title}' not found`);
   }
