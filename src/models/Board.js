@@ -14,10 +14,6 @@ const boardSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    background: {
-      type: mongoose.Schema.Types.Mixed,
-      default: null,
-    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
