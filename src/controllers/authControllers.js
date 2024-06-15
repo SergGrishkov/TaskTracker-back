@@ -38,7 +38,7 @@ export const register = errorWrapper(async (req, res, next) => {
 export const login = errorWrapper(async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  const theme = user.theme;
+  // const theme = user.theme;
 
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
@@ -56,7 +56,12 @@ export const login = errorWrapper(async (req, res, next) => {
   await User.findByIdAndUpdate(user._id, { token });
   res.status(200).json({
     token,
-    user: { email, theme, name: user.name, avatarURL: user.avatarURL },
+    user: {
+      email,
+      theme: user.theme,
+      name: user.name,
+      avatarURL: user.avatarURL,
+    },
   });
 });
 
