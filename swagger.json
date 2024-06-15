@@ -182,7 +182,7 @@
       }
     },
     "/users/theme": {
-      "patch": {
+      "put": {
         "tags": ["User Auth"],
         "summary": "Change theme for user",
         "requestBody": {
@@ -209,9 +209,25 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "john.doe@example.com"
+                    },
                     "theme": {
                       "type": "string",
                       "example": "Light"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "NameUser"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "alksdfs5dfs65df46s5df4s65df4s65df4"
+                    },
+                    "avatarURL": {
+                      "type": "string",
+                      "example": "https://www.gravatar.com/avatar/c0b"
                     }
                   }
                 }
@@ -598,7 +614,7 @@
                   },
                   "background": {
                     "type": "string",
-                    "example": "Sakura"
+                    "example": "balls"
                   }
                 },
                 "required": ["title", "icon", "background"]
@@ -711,7 +727,7 @@
                   },
                   "background": {
                     "type": "string",
-                    "example": "Sakura"
+                    "example": "bamboo"
                   }
                 },
                 "required": ["title", "icon", "background"]

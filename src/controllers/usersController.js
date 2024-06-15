@@ -15,9 +15,9 @@ export const changeTheme = errorWrapper(async (req, res) => {
     throw HttpError(404, "No user with such ID");
   }
 
-  const newUser = await User.findByIdAndUpdate(id, { theme }, { new: true });
+  const {name, email, theme: them, token, avatarURL} = await User.findByIdAndUpdate(id, { theme }, { new: true });
 
-  res.json(newUser);
+  res.json({ name, email, theme: them, token, avatarURL });
 });
 
 export const updateUser = errorWrapper(async (req, res) => {
