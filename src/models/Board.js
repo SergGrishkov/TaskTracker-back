@@ -11,7 +11,7 @@ const boardSchema = new mongoose.Schema(
       default: null,
     },
     background: {
-      type: String,
+      type: mongoose.Schema.Types.Mixed,
       default: null,
     },
     userId: {
