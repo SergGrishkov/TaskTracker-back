@@ -75,15 +75,15 @@ export const deleteTask = errorWrapper(async (req, resp) => {
 export const updateTaskColumnIdByTaskId = errorWrapper(async (req, resp) => {
   const { id: userId } = req.user;
   const { id: taskId } = req.params;
-  const { title, columnId } = req.body;
+  const { title, boardId } = req.body;
 
-  const column = await Column.findOne({ title, userId, columnId });
+  const column = await Column.findOne({ title, userId, boardId });
   if (!column) {
     throw HttpError(404, `Column with title: '${title}' not found`);
   }
 
   const task = await Task.findOneAndUpdate(
-    { _id: taskId, userId, columnId },
+    { _id: taskId, userId, boardId },
     { columnId: column._id },
     {
       new: true,

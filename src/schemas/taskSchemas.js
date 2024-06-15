@@ -58,9 +58,6 @@ export const taskUpdateTitleSchema = Joi.object({
   boardId: Joi.string()
     .required()
     .messages({ "any.required": "Missing required field: boardId" }),
-  columnId: Joi.string()
-    .required()
-    .messages({ "any.required": "Missing required field: columnId" }),
   title: Joi.string()
     .required()
     .max(50)
