@@ -87,7 +87,7 @@ export const verifyEmail = errorWrapper(async (req, res) => {
 
 export const current = errorWrapper(async (req, res, next) => {
   const { id: userId } = req.user;
-  const {name, email, avatarURL, thete, token} = await User.findById(userId);
+  const {name, email, avatarURL, theme, token} = await User.findById(userId);
 
   const boards = await Board.find({ userId });
   if (boards.length === 0) {
@@ -112,7 +112,7 @@ export const current = errorWrapper(async (req, res, next) => {
     };
   });
 
-  const result = { name, email, avatarURL, thete, token, boards };
+  const result = { name, email, avatarURL, theme, token, boards };
   sortedBoards[0].columns = col;
   result.boards = sortedBoards;
   res.json(result);
