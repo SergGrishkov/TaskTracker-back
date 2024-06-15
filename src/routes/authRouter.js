@@ -21,7 +21,7 @@ authRouter.post("/register", validateBody(registerUserSchema), register);
 authRouter.post("/login", validateBody(loginUserSchema), login);
 authRouter.post("/logout", checkAuth, logout);
 
-authRouter.put(
+authRouter.patch(
   "/theme",
   checkAuth,
   validateBody(changeThemeSchema),

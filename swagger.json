@@ -182,7 +182,7 @@
       }
     },
     "/users/theme": {
-      "put": {
+      "patch": {
         "tags": ["User Auth"],
         "summary": "Change theme for user",
         "requestBody": {
