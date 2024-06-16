@@ -144,6 +144,18 @@
                         "email": {
                           "type": "string",
                           "example": "john.doe@example.com"
+                        },
+                        "theme": {
+                          "type": "string",
+                          "example": "Light"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "NameUser"
+                        },
+                        "avatarURL": {
+                          "type": "string",
+                          "example": "https://www.gravatar.com/avatar/c0b"
                         }
                       }
                     }
@@ -170,7 +182,7 @@
       }
     },
     "/users/theme": {
-      "post": {
+      "patch": {
         "tags": ["User Auth"],
         "summary": "Change theme for user",
         "requestBody": {
@@ -197,9 +209,303 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "john.doe@example.com"
+                    },
                     "theme": {
                       "type": "string",
                       "example": "Light"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "NameUser"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "alksdfs5dfs65df46s5df4s65df4s65df4"
+                    },
+                    "avatarURL": {
+                      "type": "string",
+                      "example": "https://www.gravatar.com/avatar/c0b"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/feedback": {
+      "post": {
+        "tags": ["User Auth"],
+        "summary": "Send email",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "wwwwwqq@ukr.net"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Review the project materials: Familiarize yourself with the project's content."
+                  }
+                },
+                "required": ["email", "message"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Receive message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Your request is being processed, you will be contacted soon"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "get": {
+        "tags": ["User Auth"],
+        "summary": "Get curreint info about board, column and tasks",
+        "responses": {
+          "200": {
+            "description": "Receive message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "6662e78bbde2a294d32be34f"
+                      },
+                      "userId": {
+                        "type": "string",
+                        "example": "6662e436f19539da7e20e32e"
+                      },
+                      "title": {
+                        "type": "string",
+                        "example": "The Watch Spot Design"
+                      },
+                      "icon": {
+                        "type": "string",
+                        "example": "Star"
+                      },
+                      "background": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "6662e78bbde2a294d32be34f"
+                          },
+                          "balls": {
+                            "properties": {
+                              "desc": {
+                                "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                              },
+                              "desc2x": {
+                                "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                              },
+                              "icons": {
+                                "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                              },
+                              "mobl": {
+                                "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                              },
+                              "mobl2x": {
+                                "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                              },
+                              "tablet": {
+                                "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                              },
+                              "tablet2x": {
+                                "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "example": "2024-06-07T10:57:15.972Z"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "example": "2024-06-07T10:57:15.972Z"
+                      },
+                      "columns": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "type": "string",
+                              "example": "6662e78bbde2a294d32be34f"
+                            },
+                            "userId": {
+                              "type": "string",
+                              "example": "6662e436f19539da7e20e32e"
+                            },
+                            "boardId": {
+                              "type": "string",
+                              "example": "6660bea58deb72fa3d250e18"
+                            },
+                            "title": {
+                              "type": "string",
+                              "example": "The Watch Spot Design"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-06-07T10:57:15.972Z"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "example": "2024-06-07T10:57:15.972Z"
+                            },
+                            "task": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "_id": {
+                                    "type": "string",
+                                    "example": "6662e78bbde2a294d32be34f"
+                                  },
+                                  "userId": {
+                                    "type": "string",
+                                    "example": "6662e436f19539da7e20e32e"
+                                  },
+                                  "boardId": {
+                                    "type": "string",
+                                    "example": "6660bea58deb72fa3d250e18"
+                                  },
+                                  "columnId": {
+                                    "type": "string",
+                                    "example": "6660bea58deb72fa3d250e19"
+                                  },
+                                  "title": {
+                                    "type": "string",
+                                    "example": "The Watch Spot Design"
+                                  },
+                                  "description": {
+                                    "type": "string",
+                                    "example": "Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
+                                  },
+                                  "color": {
+                                    "type": "string",
+                                    "example": "8FA1D06"
+                                  },
+                                  "deadline": {
+                                    "type": "string",
+                                    "example": "2024-06-07"
+                                  },
+                                  "createdAt": {
+                                    "type": "string",
+                                    "example": "2024-06-07T10:57:15.972Z"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string",
+                                    "example": "2024-06-07T10:57:15.972Z"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/profile": {
+      "put": {
+        "tags": ["User Auth"],
+        "summary": "Update user profile",
+        "consumes": ["multipart/form-data"],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "File for upload"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "john.doe@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "qa123ws"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Receive message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NjA3ZmM4NGZkMzg3"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "example": "john.doe@example.com"
+                        },
+                        "theme": {
+                          "type": "string",
+                          "example": "Light"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "NameUser"
+                        },
+                        "avatarURL": {
+                          "type": "string",
+                          "example": "https://www.gravatar.com/avatar/c0b"
+                        }
+                      }
                     }
                   }
                 }
@@ -212,10 +518,10 @@
     "/boards/": {
       "get": {
         "tags": ["Boards"],
-        "summary": "Get all boards",
+        "summary": "Get boards info",
         "responses": {
           "200": {
-            "description": "Return all boards.",
+            "description": "Receive message.",
             "content": {
               "application/json": {
                 "schema": {
@@ -240,8 +546,38 @@
                         "example": "Star"
                       },
                       "background": {
-                        "type": "string",
-                        "example": "Sakura"
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "6662e78bbde2a294d32be34f"
+                          },
+                          "balls": {
+                            "properties": {
+                              "desc": {
+                                "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                              },
+                              "desc2x": {
+                                "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                              },
+                              "icons": {
+                                "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                              },
+                              "mobl": {
+                                "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                              },
+                              "mobl2x": {
+                                "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                              },
+                              "tablet": {
+                                "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                              },
+                              "tablet2x": {
+                                "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                              }
+                            }
+                          }
+                        }
                       },
                       "createdAt": {
                         "type": "string",
@@ -278,7 +614,7 @@
                   },
                   "background": {
                     "type": "string",
-                    "example": "Sakura"
+                    "example": "balls"
                   }
                 },
                 "required": ["title", "icon", "background"]
@@ -287,8 +623,8 @@
           }
         },
         "responses": {
-          "201": {
-            "description": "Board created.",
+          "200": {
+            "description": "Return all boards.",
             "content": {
               "application/json": {
                 "schema": {
@@ -311,8 +647,38 @@
                       "example": "Star"
                     },
                     "background": {
-                      "type": "string",
-                      "example": "Sakura"
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "example": "6662e78bbde2a294d32be34f"
+                        },
+                        "balls": {
+                          "properties": {
+                            "desc": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "desc2x": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "icons": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "mobl": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "mobl2x": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "tablet": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "tablet2x": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            }
+                          }
+                        }
+                      }
                     },
                     "createdAt": {
                       "type": "string",
@@ -361,7 +727,7 @@
                   },
                   "background": {
                     "type": "string",
-                    "example": "Sakura"
+                    "example": "bamboo"
                   }
                 },
                 "required": ["title", "icon", "background"]
@@ -394,8 +760,38 @@
                       "example": "Star"
                     },
                     "background": {
-                      "type": "string",
-                      "example": "Sakura"
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "example": "6662e78bbde2a294d32be34f"
+                        },
+                        "balls": {
+                          "properties": {
+                            "desc": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "desc2x": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "icons": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "mobl": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "mobl2x": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "tablet": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "tablet2x": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            }
+                          }
+                        }
+                      }
                     },
                     "createdAt": {
                       "type": "string",
@@ -451,8 +847,38 @@
                       "example": "Star"
                     },
                     "background": {
-                      "type": "string",
-                      "example": "Sakura"
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "example": "6662e78bbde2a294d32be34f"
+                        },
+                        "balls": {
+                          "properties": {
+                            "desc": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "desc2x": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "icons": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "mobl": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "mobl2x": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "tablet": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "tablet2x": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            }
+                          }
+                        }
+                      }
                     },
                     "createdAt": {
                       "type": "string",
@@ -491,7 +917,7 @@
                             "type": "string",
                             "example": "2024-06-07T10:57:15.972Z"
                           },
-                          "columns": {
+                          "task": {
                             "type": "array",
                             "items": {
                               "type": "object",
@@ -588,8 +1014,38 @@
                       "example": "Star"
                     },
                     "background": {
-                      "type": "string",
-                      "example": "Sakura"
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "example": "6662e78bbde2a294d32be34f"
+                        },
+                        "balls": {
+                          "properties": {
+                            "desc": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "desc2x": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "icons": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "mobl": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "mobl2x": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "tablet": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            },
+                            "tablet2x": {
+                              "example": "https://res.cloudinary.com/dshslvnpv/image/upload/v1717935422/desc/mkm"
+                            }
+                          }
+                        }
+                      }
                     },
                     "createdAt": {
                       "type": "string",
@@ -598,6 +1054,36 @@
                     "updatedAt": {
                       "type": "string",
                       "example": "2024-06-07T10:57:15.972Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/boards/backgrounds": {
+      "get": {
+        "tags": ["Boards"],
+        "summary": "Get backgrounds for board",
+        "responses": {
+          "200": {
+            "description": "Get backgrounds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "6662e78bbde2a294d32be34f"
+                      },
+                      "balls": {
+                        "type": "string",
+                        "example": "https://res.cloudinary.com/dshslvnpv/image/upload/c_fill,h_28,w_28/icons/xsvbhu9"
+                      }
                     }
                   }
                 }
@@ -1029,10 +1515,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "boardId": {
-                    "type": "string",
-                    "example": "6660bea58deb72fa3d250e18"
-                  },
                   "columnId": {
                     "type": "string",
                     "example": "6660bea58deb72fa3d250e19"
@@ -1055,7 +1537,6 @@
                   }
                 },
                 "required": [
-                  "boardId",
                   "columnId",
                   "title",
                   "description",
@@ -1135,9 +1616,114 @@
             "description": "Task ID for update"
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "columnId": {
+                    "type": "string",
+                    "example": "6660bea58deb72fa3d250e19"
+                  }
+                },
+                "required": ["columnId"]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Task removed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "6662e78bbde2a294d32be34f"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "example": "6662e436f19539da7e20e32e"
+                    },
+                    "boardId": {
+                      "type": "string",
+                      "example": "6660bea58deb72fa3d250e18"
+                    },
+                    "columnId": {
+                      "type": "string",
+                      "example": "6660bea58deb72fa3d250e19"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "The Watch Spot Design"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
+                    },
+                    "color": {
+                      "type": "string",
+                      "example": "8FA1D06"
+                    },
+                    "deadline": {
+                      "type": "string",
+                      "example": "2024-06-07"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2024-06-07T10:57:15.972Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Tasks"],
+        "summary": "Change column for task by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Task ID for update"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "boardId": {
+                    "type": "string",
+                    "example": "6660bea58deb72fa3d250e19"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "In Progress"
+                  }
+                },
+                "required": ["boardId", "title"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Task changed column.",
             "content": {
               "application/json": {
                 "schema": {

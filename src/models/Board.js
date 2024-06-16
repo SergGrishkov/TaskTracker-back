@@ -8,36 +8,10 @@ const boardSchema = new mongoose.Schema(
     },
     icon: {
       type: String,
-      enum: [
-        "icon/project",
-        "star",
-        "loading",
-        "container",
-        "lightning",
-        "colors",
-        "hexagon",
-      ],
       default: null,
     },
     background: {
-      type: String,
-      enum: [
-        "magnolia",
-        "night",
-        "sakura",
-        "moon",
-        "lists",
-        "sky",
-        "rocks",
-        "drib",
-        "moon2",
-        "boat",
-        "balloon",
-        "rocks2",
-        "sea",
-        "balloons",
-        "nightsky",
-      ],
+      type: mongoose.Schema.Types.Mixed,
       default: null,
     },
     userId: {
@@ -48,5 +22,7 @@ const boardSchema = new mongoose.Schema(
   },
   { versionKey: false, timestamps: true }
 );
+
+boardSchema.index({ userId: 1, title: 1 }, { unique: true });
 
 export default mongoose.model("Board", boardSchema);

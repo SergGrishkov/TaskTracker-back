@@ -10,10 +10,12 @@ import {
 } from "../controllers/authControllers.js";
 import { checkAuth } from "../middlewares/checkAuth.js";
 import { feedbackSchema } from "../schemas/feedbackSchemas.js";
-import { changeTheme } from "../controllers/usersController.js";
-import { changeThemeSchema } from "../schemas/userSchemas.js";
+import { changeTheme, updateUser } from "../controllers/usersController.js";
+import { changeThemeSchema, updateUserSchema } from "../schemas/userSchemas.js";
+import multer from "multer";
 
 const authRouter = express.Router();
+const uploadFile = multer();
 
 authRouter.post("/register", validateBody(registerUserSchema), register);
 authRouter.post("/login", validateBody(loginUserSchema), login);
@@ -24,6 +26,14 @@ authRouter.patch(
   checkAuth,
   validateBody(changeThemeSchema),
   changeTheme
+);
+
+authRouter.put(
+  "/profile",
+  checkAuth,
+  validateBody(updateUserSchema),
+  uploadFile.single("avatar"),
+  updateUser
 );
 
 authRouter.get("/current", checkAuth, current);

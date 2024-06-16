@@ -3,13 +3,11 @@ import { errorWrapper } from "../helpers/Wrapper.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import gravatar from "gravatar";
-import crypto from "crypto";
-import sendVerificationToken from "../helpers/sendVerificationToken.js";
 import Board from "../models/Board.js";
 import Column from "../models/Column.js";
 import Task from "../models/Task.js";
 import sendEmail from "../helpers/feedback.js";
+import _ from "lodash";
 
 export const register = errorWrapper(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -20,22 +18,26 @@ export const register = errorWrapper(async (req, res, next) => {
   }
 
   const passHash = await bcrypt.hash(password, 10);
-  const avatarURL = gravatar.url(email);
 
-  const newUser = User.create({
+  const newUser = await User.create({
     name,
     email,
     password: passHash,
-    avatarURL,
   });
 
-  res.status(201).json({ user: { name, email } });
+  console.log(newUser);
+
+  const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+    expiresIn: "120h",
+  });
+  await User.findByIdAndUpdate(newUser._id, { token });
+
+  res.status(201).json({ token, user: { email, name: newUser.name } });
 });
 
 export const login = errorWrapper(async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  const theme = user.theme;
 
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
@@ -51,12 +53,15 @@ export const login = errorWrapper(async (req, res, next) => {
     expiresIn: "120h",
   });
   await User.findByIdAndUpdate(user._id, { token });
-  res
-    .status(200)
-    .json({
-      token,
-      user: { email, theme, name: user.name, avatarURL: user.avatarURL },
-    });
+  res.status(200).json({
+    token,
+    user: {
+      email,
+      theme: user.theme,
+      name: user.name,
+      avatarURL: user.avatarURL,
+    },
+  });
 });
 
 export const logout = errorWrapper(async (req, res) => {
@@ -84,54 +89,44 @@ export const verifyEmail = errorWrapper(async (req, res) => {
   });
 });
 
-export const resendVerifyEmail = errorWrapper(async (req, res) => {
-  const { email } = req.body;
-  const user = await User.findOne({ email });
-
-  if (!user) {
-    throw HttpError(404, "User not found");
-  }
-
-  if (user.verify) {
-    throw HttpError(400, "Verification has already been passed");
-  }
-
-  const verificationToken = crypto.randomUUID();
-  user.verificationToken = verificationToken;
-  await user.save();
-
-  await sendVerificationToken(email, user.verificationToken);
-  res.json({
-    message: "Verify email sent",
-  });
-});
-
 export const current = errorWrapper(async (req, res, next) => {
-  await User.findOne(req.user);
-  const boards = await Board.find({ userId: req.user.id });
-  const boardsArr = await Promise.all(
-    boards.map(async (board) => {
-      const boardId = board._id.toString();
-      const columns = await Column.find({ boardId });
+  const { id: userId } = req.user;
+  const { name, email, avatarURL, theme, token } = await User.findById(userId);
 
-      const columnsArr = await Promise.all(
-        columns.map(async (column) => {
-          const columnid = column._id.toString();
-          const tasks = await Task.find({ columnId: columnid });
+  let result;
 
-          return { ...column.toObject(), tasks };
-        })
-      );
+  const boards = await Board.find({ userId });
+  if (boards.length > 0) {
+    const sortedBoards = _.orderBy(
+      boards,
+      [(obj) => obj.createdAt],
+      ["asc"]
+    ).map((b) => b.toObject());
 
-      return { ...board.toObject(), columns: columnsArr };
-    })
-  );
+    const boardId = sortedBoards[0]._id;
 
-  return res.status(200).json({
-    userId: req.user.id,
-    boards: boardsArr,
-  });
+    const tasks = await Task.find({ userId, boardId });
+    const columns = await Column.find({ userId, boardId });
+
+    const col = columns.map((c) => {
+      return {
+        ...c._doc,
+        tasks: tasks.filter((t) => {
+          return t.columnId.toString() === c._id.toString();
+        }),
+      };
+    });
+
+    result = { name, email, avatarURL, theme, token, boards };
+    sortedBoards[0].columns = col;
+    result.boards = sortedBoards;
+  } else {
+    result = { name, email, avatarURL, theme, token, boards: [] };
+  }
+
+  res.json(result);
 });
+
 export const feedback = errorWrapper(async (req, res, next) => {
   const { email, message } = req.body;
   const taskProjectEmail = "taskpro.project@gmail.com";
