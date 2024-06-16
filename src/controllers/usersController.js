@@ -70,11 +70,7 @@ export const updateUser = errorWrapper(async (req, res) => {
     );
   }
 
-  res.json({
-    name: updateUser.name,
-    email: updateUser.email,
-    theme: updateUser.theme,
-    token: updateUser.token,
-    avatarURL: updateUser.avatarURL,
-  });
+  delete updateUser.password;
+
+  res.json({ ...updateUser });
 });
