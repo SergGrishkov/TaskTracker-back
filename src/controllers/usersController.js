@@ -71,7 +71,7 @@ export const updateUser = errorWrapper(async (req, res) => {
   }
 
   delete updateUser.password;
-  const result = {...updateUser}
+  const result = Object.assign({}, updateUser)
 
   res.json(result);
 });
