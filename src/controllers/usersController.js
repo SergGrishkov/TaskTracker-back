@@ -70,8 +70,8 @@ export const updateUser = errorWrapper(async (req, res) => {
     );
   }
 
-  delete updateUser.password;
-  const result = Object.assign({}, updateUser)
+  delete updatedUser.password;
+  const result = Object.assign({}, updatedUser);
 
   res.json(result);
 });
