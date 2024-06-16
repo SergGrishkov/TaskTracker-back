@@ -12,7 +12,7 @@ export const getAllBoards = errorWrapper(async (req, res) => {
 
   const sortedBoards = _.orderBy(boards, [(obj) => obj.createdAt], ["asc"]);
 
-  res.status(201).json(sortedBoards);
+  res.status(200).json(sortedBoards);
 });
 
 export const getOneBoard = errorWrapper(async (req, res) => {
