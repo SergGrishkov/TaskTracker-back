@@ -70,8 +70,11 @@ export const updateUser = errorWrapper(async (req, res) => {
     );
   }
 
-  
-  const {name: n, email: e, theme, token, avatarURL} = updateUser;
-
-  res.json({name: n, email: e, theme, token, avatarURL});
+  res.json({
+    name: updateUser.name,
+    email: updateUser.email,
+    theme: updateUser.theme,
+    token: updateUser.token,
+    avatarURL: updateUser.avatarURL,
+  });
 });
