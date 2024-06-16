@@ -67,11 +67,37 @@ export const updateBoard = errorWrapper(async (req, res) => {
   if (existingBoard.userId.toString() !== req.user.id.toString()) {
     throw HttpError(403, "Authentication problem, choose your board ");
   }
+<<<<<<< Updated upstream
   const updatedBoard = await Board.findByIdAndUpdate(boardId, board, {
     new: true,
   });
   if (updatedBoard === null) {
     throw HttpError(404, "Not found");
+=======
+  const images = (await Background.find({})).map((i) => i.toObject());
+
+  let updatedBoard;
+
+  if (background !== "") {
+    let backgroundObj = images.find((f) => {
+      return f[background] !== undefined;
+    });
+    board.background = backgroundObj;
+    updatedBoard = await Board.findByIdAndUpdate(boardId, board, {
+      new: true,
+    });
+    if (updatedBoard === null) {
+      throw HttpError(404, "Not found");
+    }
+  } else {
+    board.background = null;
+    updatedBoard = await Board.findByIdAndUpdate(boardId, board, {
+      new: true,
+    });
+    if (updatedBoard === null) {
+      throw HttpError(404, "Not found");
+    }
+>>>>>>> Stashed changes
   }
 
   res.send(updatedBoard);
