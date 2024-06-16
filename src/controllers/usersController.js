@@ -15,7 +15,13 @@ export const changeTheme = errorWrapper(async (req, res) => {
     throw HttpError(404, "No user with such ID");
   }
 
-  const {name, email, theme: them, token, avatarURL} = await User.findByIdAndUpdate(id, { theme }, { new: true });
+  const {
+    name,
+    email,
+    theme: them,
+    token,
+    avatarURL,
+  } = await User.findByIdAndUpdate(id, { theme }, { new: true });
 
   res.json({ name, email, theme: them, token, avatarURL });
 });
@@ -23,7 +29,7 @@ export const changeTheme = errorWrapper(async (req, res) => {
 export const updateUser = errorWrapper(async (req, res) => {
   const { id: userId } = req.user;
   const { name, email, password } = req.body;
-  const file  = req.file;
+  const file = req.file;
 
   if (Object.keys(req.body).length === 0) {
     return res.status(400).json({
@@ -50,10 +56,9 @@ export const updateUser = errorWrapper(async (req, res) => {
       { new: true }
     );
   } else {
-
     const avatar = await uploadToCloudinary(file.buffer);
 
-     updatedUser = await User.findByIdAndUpdate(
+    updatedUser = await User.findByIdAndUpdate(
       userId,
       {
         name,
@@ -64,6 +69,7 @@ export const updateUser = errorWrapper(async (req, res) => {
       { new: true }
     );
   }
-
+  delete updateUser.password;
+  
   res.json(updatedUser);
 });
