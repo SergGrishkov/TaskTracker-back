@@ -69,7 +69,10 @@ export const updateUser = errorWrapper(async (req, res) => {
       { new: true }
     );
   }
-  delete updateUser.password;
-  
-  res.json(updatedUser);
+
+  {
+    const {name, email, theme, token, avatarURL} = updateUser;
+    res.json({ name, email, theme, token, avatarURL });
+  }
+
 });
