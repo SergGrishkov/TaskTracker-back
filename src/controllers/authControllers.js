@@ -3,11 +3,13 @@ import { errorWrapper } from "../helpers/Wrapper.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import queryString from "query-string";
 import Board from "../models/Board.js";
 import Column from "../models/Column.js";
 import Task from "../models/Task.js";
 import sendEmail from "../helpers/feedback.js";
 import _ from "lodash";
+import { URL } from "url";
 
 export const register = errorWrapper(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -140,4 +142,54 @@ export const feedback = errorWrapper(async (req, res, next) => {
   res.status(200).send({
     message: "Your request is being processed, you will be contacted soon",
   });
+});
+
+export const googleAuth = errorWrapper(async (req, res) => {
+  const stringifiedParams = queryString.stringify({
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    redirect_uri: `${process.env.BASE_URL}/auth/google-redirect`,
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
+    ].join(" "),
+    response_type: "code",
+    access_type: "offline",
+    prompt: "consent",
+  });
+
+  return res.redirect(
+    `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`
+  );
+});
+
+export const googleRedirect = errorWrapper(async (req, res) => {
+  const fullUrl = `${req.protocol}://${req.get("host")}${req.originalUrl}`;
+  const urlObj = new URL(fullUrl);
+  const urlParams = queryString.parse(urlObj.search);
+  const code = urlParams.code;
+  const tokenData = await axios({
+    url: `https://oauth2.googleapis.com/token`,
+    method: "post",
+    data: {
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET,
+      redirect_uri: `${process.env.BASE_URL}/auth/google-redirect`,
+      grant_type: "authorization_code",
+      code,
+    },
+  });
+  const userData = await axios({
+    url: "https://www.googleapis.com/oauth2/v2/userinfo",
+    method: "get",
+    headers: {
+      Authorization: `Bearer ${tokenData.data.access_token}`,
+    },
+  });
+  // userData.data.email
+  // ...
+  // ...
+  // ...
+  return res.redirect(
+    `${process.env.FRONTEND_URL}?accessToken=${userData.data.accessToken}`
+  );
 });
