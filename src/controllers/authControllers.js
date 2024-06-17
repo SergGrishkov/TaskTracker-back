@@ -19,19 +19,25 @@ export const register = errorWrapper(async (req, res, next) => {
 
   const passHash = await bcrypt.hash(password, 10);
 
-  await User.create({
+  const newUser = await User.create({
     name,
     email,
     password: passHash,
   });
 
-  res.status(201).json({ user: { name, email } });
+  console.log(newUser);
+
+  const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+    expiresIn: "120h",
+  });
+  await User.findByIdAndUpdate(newUser._id, { token });
+
+  res.status(201).json({ token, user: { email, name: newUser.name } });
 });
 
 export const login = errorWrapper(async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  const theme = user.theme;
 
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
@@ -49,7 +55,12 @@ export const login = errorWrapper(async (req, res, next) => {
   await User.findByIdAndUpdate(user._id, { token });
   res.status(200).json({
     token,
-    user: { email, theme, name: user.name, avatarURL: user.avatarURL },
+    user: {
+      email,
+      theme: user.theme,
+      name: user.name,
+      avatarURL: user.avatarURL,
+    },
   });
 });
 
@@ -80,32 +91,40 @@ export const verifyEmail = errorWrapper(async (req, res) => {
 
 export const current = errorWrapper(async (req, res, next) => {
   const { id: userId } = req.user;
+  const { name, email, avatarURL, theme, token } = await User.findById(userId);
+
+  let result;
 
   const boards = await Board.find({ userId });
-  if (boards.length === 0) {
-    return res.status(404).json({ message: "No boards found" });
+  if (boards.length > 0) {
+    const sortedBoards = _.orderBy(
+      boards,
+      [(obj) => obj.createdAt],
+      ["asc"]
+    ).map((b) => b.toObject());
+
+    const boardId = sortedBoards[0]._id;
+
+    const tasks = await Task.find({ userId, boardId });
+    const columns = await Column.find({ userId, boardId });
+
+    const col = columns.map((c) => {
+      return {
+        ...c._doc,
+        tasks: tasks.filter((t) => {
+          return t.columnId.toString() === c._id.toString();
+        }),
+      };
+    });
+
+    result = { name, email, avatarURL, theme, token, boards };
+    sortedBoards[0].columns = col;
+    result.boards = sortedBoards;
+  } else {
+    result = { name, email, avatarURL, theme, token, boards: [] };
   }
 
-  const sortedBoards = _.orderBy(boards, [(obj) => obj.createdAt], ["asc"]).map(
-    (b) => b.toObject()
-  );
-
-  const boardId = sortedBoards[0]._id;
-
-  const tasks = await Task.find({ userId, boardId });
-  const columns = await Column.find({ userId, boardId });
-
-  const col = columns.map((c) => {
-    return {
-      ...c._doc,
-      tasks: tasks.filter((t) => {
-        return t.columnId.toString() === c._id.toString();
-      }),
-    };
-  });
-
-  sortedBoards[0].columns = col;
-  res.json(sortedBoards);
+  res.json(result);
 });
 
 export const feedback = errorWrapper(async (req, res, next) => {

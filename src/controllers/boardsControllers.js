@@ -12,7 +12,7 @@ export const getAllBoards = errorWrapper(async (req, res) => {
 
   const sortedBoards = _.orderBy(boards, [(obj) => obj.createdAt], ["asc"]);
 
-  res.status(201).json(sortedBoards);
+  res.status(200).json(sortedBoards);
 });
 
 export const getOneBoard = errorWrapper(async (req, res) => {
@@ -84,17 +84,29 @@ export const updateBoard = errorWrapper(async (req, res) => {
   if (existingBoard.userId.toString() !== req.user.id.toString()) {
     throw HttpError(403, "Authentication problem, choose your board ");
   }
-  const images = (await Background.find({})).map((i) => i.toObject());
+const images = (await Background.find({})).map((i) => i.toObject());
 
-  let backgroundObj = images.find((f) => {
-    return f[background] !== undefined;
-  });
-  board.background = backgroundObj;
-  const updatedBoard = await Board.findByIdAndUpdate(boardId, board, {
-    new: true,
-  });
-  if (updatedBoard === null) {
-    throw HttpError(404, "Not found");
+  let updatedBoard;
+
+  if (background !== "") {
+    let backgroundObj = images.find((f) => {
+      return f[background] !== undefined;
+    });
+    board.background = backgroundObj;
+    updatedBoard = await Board.findByIdAndUpdate(boardId, board, {
+      new: true,
+    });
+    if (updatedBoard === null) {
+      throw HttpError(404, "Not found");
+    }
+  } else {
+    board.background = null;
+    updatedBoard = await Board.findByIdAndUpdate(boardId, board, {
+      new: true,
+    });
+    if (updatedBoard === null) {
+      throw HttpError(404, "Not found");
+    }
   }
 
   res.send(updatedBoard);

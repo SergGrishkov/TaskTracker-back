@@ -13,6 +13,6 @@ export const createBoardSchema = Joi.object({
 export const updateBoardSchema = Joi.object({
   title: Joi.string().lowercase().trim(),
   icon: Joi.string(),
-  background: Joi.string(),
+  background: Joi.string().allow('').optional(),
   enterImg: Joi.string(),
 });

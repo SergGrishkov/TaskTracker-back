@@ -144,6 +144,18 @@
                         "email": {
                           "type": "string",
                           "example": "john.doe@example.com"
+                        },
+                        "theme": {
+                          "type": "string",
+                          "example": "Light"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "NameUser"
+                        },
+                        "avatarURL": {
+                          "type": "string",
+                          "example": "https://www.gravatar.com/avatar/c0b"
                         }
                       }
                     }
@@ -197,9 +209,25 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "john.doe@example.com"
+                    },
                     "theme": {
                       "type": "string",
                       "example": "Light"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "NameUser"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "alksdfs5dfs65df46s5df4s65df4s65df4"
+                    },
+                    "avatarURL": {
+                      "type": "string",
+                      "example": "https://www.gravatar.com/avatar/c0b"
                     }
                   }
                 }
@@ -413,6 +441,80 @@
         }
       }
     },
+    "/users/profile": {
+      "put": {
+        "tags": ["User Auth"],
+        "summary": "Update user profile",
+        "consumes": ["multipart/form-data"],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "File for upload"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "john.doe@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "qa123ws"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Receive message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NjA3ZmM4NGZkMzg3"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "example": "john.doe@example.com"
+                        },
+                        "theme": {
+                          "type": "string",
+                          "example": "Light"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "NameUser"
+                        },
+                        "avatarURL": {
+                          "type": "string",
+                          "example": "https://www.gravatar.com/avatar/c0b"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/boards/": {
       "get": {
         "tags": ["Boards"],
@@ -512,7 +614,7 @@
                   },
                   "background": {
                     "type": "string",
-                    "example": "Sakura"
+                    "example": "balls"
                   }
                 },
                 "required": ["title", "icon", "background"]
@@ -625,7 +727,7 @@
                   },
                   "background": {
                     "type": "string",
-                    "example": "Sakura"
+                    "example": "bamboo"
                   }
                 },
                 "required": ["title", "icon", "background"]
@@ -1605,7 +1707,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "columnId": {
+                  "boardId": {
                     "type": "string",
                     "example": "6660bea58deb72fa3d250e19"
                   },
@@ -1614,7 +1716,7 @@
                     "example": "In Progress"
                   }
                 },
-                "required": ["columnId", "title"]
+                "required": ["boardId", "title"]
               }
             }
           }

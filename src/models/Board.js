@@ -11,10 +11,6 @@ const boardSchema = new mongoose.Schema(
       default: null,
     },
     background: {
-      type: String,
-      default: null,
-    },
-    background: {
       type: mongoose.Schema.Types.Mixed,
       default: null,
     },
@@ -26,5 +22,7 @@ const boardSchema = new mongoose.Schema(
   },
   { versionKey: false, timestamps: true }
 );
+
+boardSchema.index({ userId: 1, title: 1 }, { unique: true });
 
 export default mongoose.model("Board", boardSchema);
