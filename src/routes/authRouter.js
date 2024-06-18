@@ -7,6 +7,8 @@ import {
   logout,
   current,
   feedback,
+  googleAuth,
+  googleRedirect,
 } from "../controllers/authControllers.js";
 import { checkAuth } from "../middlewares/checkAuth.js";
 import { feedbackSchema } from "../schemas/feedbackSchemas.js";
@@ -37,6 +39,8 @@ authRouter.put(
 );
 
 authRouter.get("/current", checkAuth, current);
+authRouter.get("/google", googleAuth);
+authRouter.get("/google-redirect", googleRedirect);
 authRouter.post("/feedback", validateBody(feedbackSchema), checkAuth, feedback);
 
 export default authRouter;
