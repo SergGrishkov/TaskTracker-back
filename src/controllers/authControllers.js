@@ -41,7 +41,7 @@ export const login = errorWrapper(async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
-  if (!user) {
+  if (!user || user.isGoogleAuth) {
     throw HttpError(401, "Email or password is wrong");
   }
 
@@ -54,6 +54,7 @@ export const login = errorWrapper(async (req, res, next) => {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: "120h",
   });
+
   await User.findByIdAndUpdate(user._id, { token });
   res.status(200).json({
     token,
@@ -157,8 +158,6 @@ export const googleAuth = errorWrapper(async (req, res) => {
     prompt: "consent",
   });
 
-  console.log(stringifiedParams);
-
   return res.redirect(
     `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`
   );
@@ -189,13 +188,28 @@ export const googleRedirect = errorWrapper(async (req, res) => {
     },
   });
 
-  console.log(userData);
+  let user = await User.findOne({ email: userData.data.email });
 
-  if (!userData.data.email) {
-    return res.redirect(`${process.env.FRONTEND_URL}`);
+  if (!user) {
+    user = await User.create({
+      email: userData.data.email,
+      name: userData.data.name,
+      isGoogleAuth: true,
+      password: "GoogleAuth",
+    });
   }
 
+  if (!user.isGoogleAuth) {
+    return res.redirect(`${process.env.FRONTEND_URL}/auth/login`);
+  }
+
+  const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "120h",
+  });
+
+  await User.findByIdAndUpdate(user._id, { token: accessToken }, { new: true });
+
   return res.redirect(
-    `${process.env.FRONTEND_URL}?accessToken=${userData.data.accessToken}`
+    `${process.env.FRONTEND_URL}/google/auth?accessToken=${accessToken}`
   );
 });
