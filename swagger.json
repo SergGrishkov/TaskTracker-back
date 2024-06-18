@@ -410,9 +410,9 @@
                                     "type": "string",
                                     "example": "Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
                                   },
-                                  "color": {
+                                  "label": {
                                     "type": "string",
-                                    "example": "8FA1D06"
+                                    "example": "high"
                                   },
                                   "deadline": {
                                     "type": "string",
@@ -946,9 +946,9 @@
                                   "type": "string",
                                   "example": "Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
                                 },
-                                "color": {
+                                "label": {
                                   "type": "string",
-                                  "example": "8FA1D06"
+                                  "example": "high"
                                 },
                                 "deadline": {
                                   "type": "string",
@@ -1368,9 +1368,9 @@
                         "type": "string",
                         "example": "Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
                       },
-                      "color": {
+                      "label": {
                         "type": "string",
-                        "example": "8FA1D06"
+                        "example": "high"
                       },
                       "deadline": {
                         "type": "string",
@@ -1417,9 +1417,9 @@
                     "type": "string",
                     "example": "Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
                   },
-                  "color": {
+                  "label": {
                     "type": "string",
-                    "example": "8FA1D0"
+                    "example": "high"
                   },
                   "deadline": {
                     "type": "string",
@@ -1431,7 +1431,7 @@
                   "columnId",
                   "title",
                   "description",
-                  "color",
+                  "label",
                   "deadline"
                 ]
               }
@@ -1470,9 +1470,9 @@
                       "type": "string",
                       "example": "Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
                     },
-                    "color": {
+                    "label": {
                       "type": "string",
-                      "example": "8FA1D06"
+                      "example": "high"
                     },
                     "deadline": {
                       "type": "string",
@@ -1527,9 +1527,9 @@
                     "type": "string",
                     "example": "UPDATE DESCRIPTION Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
                   },
-                  "color": {
+                  "label": {
                     "type": "string",
-                    "example": "8FA1D0"
+                    "example": "high"
                   },
                   "deadline": {
                     "type": "string",
@@ -1540,7 +1540,7 @@
                   "columnId",
                   "title",
                   "description",
-                  "color",
+                  "label",
                   "deadline"
                 ]
               }
@@ -1579,9 +1579,9 @@
                       "type": "string",
                       "example": "UPDATE DESCRIPTION Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
                     },
-                    "color": {
+                    "label": {
                       "type": "string",
-                      "example": "8FA1D06"
+                      "example": "high"
                     },
                     "deadline": {
                       "type": "string",
@@ -1664,9 +1664,9 @@
                       "type": "string",
                       "example": "Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
                     },
-                    "color": {
+                    "label": {
                       "type": "string",
-                      "example": "8FA1D06"
+                      "example": "high"
                     },
                     "deadline": {
                       "type": "string",
@@ -1753,9 +1753,9 @@
                       "type": "string",
                       "example": "Create a visually stunning and eye-catching watch dial design that embodies our brand's essence of sleek aesthetics and modern elegance."
                     },
-                    "color": {
+                    "label": {
                       "type": "string",
-                      "example": "8FA1D06"
+                      "example": "high"
                     },
                     "deadline": {
                       "type": "string",
