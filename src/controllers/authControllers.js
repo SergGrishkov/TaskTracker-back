@@ -163,6 +163,7 @@ export const googleAuth = errorWrapper(async (req, res) => {
 
 export const googleRedirect = errorWrapper(async (req, res) => {
   const fullUrl = `${req.protocol}://${req.get("host")}${req.originalUrl}`;
+
   const urlObj = new URL(fullUrl);
   const urlParams = queryString.parse(urlObj.search);
   const code = urlParams.code;
