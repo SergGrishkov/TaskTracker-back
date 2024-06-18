@@ -2,6 +2,10 @@ import { Schema, mongoose } from "mongoose";
 
 const userSchema = new Schema(
   {
+    isGoogleAuth: {
+      type: Boolean,
+      default: false,
+    },
     name: {
       type: String,
       required: [true, "Name is required"],
@@ -17,7 +21,6 @@ const userSchema = new Schema(
     },
     theme: {
       type: String,
-      required: [true, "Theme is required"],
       enum: ["Light", "Dark", "Violet"],
       default: "Light",
     },
