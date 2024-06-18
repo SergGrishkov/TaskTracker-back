@@ -9,6 +9,7 @@ import Column from "../models/Column.js";
 import Task from "../models/Task.js";
 import sendEmail from "../helpers/feedback.js";
 import _ from "lodash";
+import axios from "axios";
 
 export const register = errorWrapper(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -146,7 +147,7 @@ export const feedback = errorWrapper(async (req, res) => {
 export const googleAuth = errorWrapper(async (req, res) => {
   const stringifiedParams = queryString.stringify({
     client_id: process.env.GOOGLE_CLIENT_ID,
-    redirect_uri: `${process.env.BASE_URL}/users/google-redirect`,
+    redirect_uri: `${process.env.BASE_URL}/api/users/google-redirect`,
     scope: [
       "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/userinfo.profile",
@@ -175,7 +176,7 @@ export const googleRedirect = errorWrapper(async (req, res) => {
     data: {
       client_id: process.env.GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri: `${process.env.BASE_URL}/users/google-redirect`,
+      redirect_uri: `${process.env.BASE_URL}/api/users/google-redirect`,
       grant_type: "authorization_code",
       code,
     },
