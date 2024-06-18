@@ -9,7 +9,6 @@ import Column from "../models/Column.js";
 import Task from "../models/Task.js";
 import sendEmail from "../helpers/feedback.js";
 import _ from "lodash";
-import { URL } from "url";
 
 export const register = errorWrapper(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -129,7 +128,7 @@ export const current = errorWrapper(async (req, res, next) => {
   res.json(result);
 });
 
-export const feedback = errorWrapper(async (req, res, next) => {
+export const feedback = errorWrapper(async (req, res) => {
   const { email, message } = req.body;
   const taskProjectEmail = "taskpro.project@gmail.com";
   const verifyMail = {
@@ -147,7 +146,7 @@ export const feedback = errorWrapper(async (req, res, next) => {
 export const googleAuth = errorWrapper(async (req, res) => {
   const stringifiedParams = queryString.stringify({
     client_id: process.env.GOOGLE_CLIENT_ID,
-    redirect_uri: `${process.env.BASE_URL}/auth/google-redirect`,
+    redirect_uri: `${process.env.BASE_URL}/users/google-redirect`,
     scope: [
       "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/userinfo.profile",
@@ -173,7 +172,7 @@ export const googleRedirect = errorWrapper(async (req, res) => {
     data: {
       client_id: process.env.GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri: `${process.env.BASE_URL}/auth/google-redirect`,
+      redirect_uri: `${process.env.BASE_URL}/users/google-redirect`,
       grant_type: "authorization_code",
       code,
     },
@@ -185,10 +184,13 @@ export const googleRedirect = errorWrapper(async (req, res) => {
       Authorization: `Bearer ${tokenData.data.access_token}`,
     },
   });
-  // userData.data.email
-  // ...
-  // ...
-  // ...
+
+  console.log(userData);
+
+  if (!userData.data.email) {
+    return res.redirect(`${process.env.FRONTEND_URL}`);
+  }
+
   return res.redirect(
     `${process.env.FRONTEND_URL}?accessToken=${userData.data.accessToken}`
   );
