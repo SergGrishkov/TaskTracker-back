@@ -17,10 +17,12 @@ export const taskCreateSchema = Joi.object({
     .max(1000)
     .trim()
     .messages({ "any.required": "Missing required field: description" }),
-  color: Joi.string()
+  label: Joi.string()
     .required()
     .trim()
-    .messages({ "any.required": "Missing required field: color" }),
+    .lowercase()
+    .valid("without priority", "low", "medium", "high")
+    .messages({ "any.required": "Missing required field: label" }),
   deadline: Joi.string()
     .required()
     .trim()
@@ -44,10 +46,12 @@ export const taskUpdateSchema = Joi.object({
     .max(1000)
     .trim()
     .messages({ "any.required": "Missing required field: description" }),
-  color: Joi.string()
+  label: Joi.string()
     .required()
     .trim()
-    .messages({ "any.required": "Missing required field: color" }),
+    .lowercase()
+    .valid("without priority", "low", "medium", "high")
+    .messages({ "any.required": "Missing required field: label" }),
   deadline: Joi.string()
     .required()
     .trim()

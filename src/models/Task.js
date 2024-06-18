@@ -24,9 +24,10 @@ const taskSchema = new Schema(
       type: String,
       required: [true, "Description is required"],
     },
-    color: {
+    label: {
       type: String,
-      required: [true, "Color is required"],
+      required: [true, "Label is required"],
+      enum: ["without priority", "low", "medium", "high"],
     },
     deadline: {
       type: String,
