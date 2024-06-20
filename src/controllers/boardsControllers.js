@@ -43,7 +43,7 @@ export const getOneBoard = errorWrapper(async (req, res) => {
     };
   });
   const boarlFull = board[0]._doc;
-  boarlFull.columns = col;
+  boarlFull.columns = _.orderBy(col, [(obj) => obj.createdAt], ["asc"]);
 
   res.status(200).json(boarlFull);
 });
