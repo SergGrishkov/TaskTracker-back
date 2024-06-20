@@ -134,7 +134,7 @@ export const feedback = errorWrapper(async (req, res) => {
   const { email, message } = req.body;
   const taskProjectEmail = "taskpro.project@gmail.com";
   const verifyMail = {
-    to: "lysbrodya@gmail.com",
+    to: taskProjectEmail,
     subject: "Mail support service",
     html: `<p>Mail from:</p><p style="color: green"> ${email}</p><p>message:</p><p style="color: red">${message}</p>`,
     text: `Mail from: ${email}.${message}`,
